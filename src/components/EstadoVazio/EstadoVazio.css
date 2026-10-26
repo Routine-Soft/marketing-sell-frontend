@@ -1,0 +1,34 @@
+.estado-vazio {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 40px 16px;
+  text-align: center;
+  animation: fadeInUp 0.4s var(--ease) backwards;
+}
+
+.estado-vazio__icone {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  background: var(--primary-soft);
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.estado-vazio__icone svg {
+  width: 26px;
+  height: 26px;
+}
+
+.estado-vazio__titulo {
+  font-size: 1.05rem;
+}
+
+.estado-vazio__texto {
+  margin: 0 0 8px;
+  max-width: 420px;
+  color: var(--text-muted);
+}

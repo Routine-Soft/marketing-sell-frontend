@@ -1,0 +1,48 @@
+.contas-adm {
+  display: grid;
+  gap: 16px;
+}
+
+.contas-adm__busca {
+  max-width: 420px;
+}
+
+.contas-adm__skeleton {
+  display: grid;
+  gap: 10px;
+}
+
+.contas-adm td small,
+.contas-adm td span,
+.contas-adm td a {
+  display: block;
+}
+
+.contas-adm td small {
+  color: var(--text-muted);
+}
+
+.contas-adm__conta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.contas-adm__conta > span:last-child {
+  min-width: 0;
+}
+
+.contas-adm__email {
+  overflow-wrap: anywhere;
+}
+
+td small.contas-adm__cota--cheia {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.contas-adm__nota {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}

@@ -1,0 +1,93 @@
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.kpi {
+  display: grid;
+  gap: 4px;
+  padding: 18px;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+
+.kpi:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.kpi__icone {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 6px;
+  border-radius: var(--radius-md);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.kpi__icone svg {
+  width: 20px;
+  height: 20px;
+}
+
+.kpi__rotulo {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.kpi__valor {
+  font-size: 1.8rem;
+  line-height: 1.1;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: popIn 0.4s var(--ease) backwards;
+}
+
+.kpi__skeleton {
+  width: 60%;
+  height: 30px;
+}
+
+.passos {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: passo;
+}
+
+.passos li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 2px 12px;
+  counter-increment: passo;
+}
+
+.passos li::before {
+  content: counter(passo);
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: var(--on-primary);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.passos span {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}

@@ -1,0 +1,16 @@
+.confirmar-no-lugar {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px 2px 10px;
+  border-radius: 999px;
+  background: var(--danger-soft);
+  animation: popIn 0.2s var(--ease) backwards;
+}
+
+.confirmar-no-lugar__pergunta {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--danger);
+  white-space: nowrap;
+}

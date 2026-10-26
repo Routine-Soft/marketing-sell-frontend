@@ -1,0 +1,134 @@
+.input--travado {
+  color: var(--text);
+  background: var(--surface-2);
+  cursor: not-allowed;
+}
+
+.cotas-gmail {
+  display: grid;
+  gap: 14px;
+  padding: 20px 22px;
+  margin-bottom: 20px;
+}
+
+.cotas-gmail__titulo {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.cotas-gmail__lista {
+  display: grid;
+  gap: 14px;
+}
+
+.cota-gmail {
+  display: grid;
+  gap: 6px;
+}
+
+.cota-gmail__texto {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.cota-gmail__texto strong {
+  color: var(--text);
+}
+
+.cota-gmail__barra {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.cota-gmail__barra span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gradient-primary);
+  transform-origin: left;
+  animation: growBar 0.9s var(--ease) 0.3s backwards;
+}
+
+.cota-gmail[data-cheia='true'] .cota-gmail__barra span {
+  background: var(--danger);
+}
+
+.cota-gmail__fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.remetentes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 14px;
+}
+
+.remetente-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 22px;
+  transition:
+    transform 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+
+.remetente-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.remetente-card__topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.remetente-card__topo strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.remetente-card__topo small {
+  display: block;
+  color: var(--text-muted);
+}
+
+.remetente-card__email {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--text-muted);
+}
+
+.remetente-card__assunto {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.remetente-card__acoes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 480px) {
+  .cotas-gmail,
+  .remetente-card {
+    padding: 16px;
+  }
+}

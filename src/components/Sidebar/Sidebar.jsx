@@ -1,0 +1,107 @@
+import { Link, NavLink } from 'react-router-dom'
+import { useAuthContext } from '@/hooks/useAuthContext'
+import ThemeToggle from '@/components/ThemeToggle/ThemeToggle'
+import IdiomaToggle from '@/components/IdiomaToggle/IdiomaToggle'
+import { Icone, IconeX } from '@/components/CrudCard/icones'
+import { ROTULO_FUNCAO } from '@/modules/user/user.constants'
+import { iniciais } from '@/utils/nome'
+import Marca from './Marca'
+import BotaoInstalar from './BotaoInstalar'
+import { ICONES } from './menuIcones'
+import './Sidebar.css'
+import { tr } from '@/i18n';
+
+const TODOS = ['super_admin', 'admin', 'membro']
+
+const GRUPOS = [
+    {
+        titulo: tr('Principal'),
+        itens: [
+            { label: tr('Página inicial'), path: '/home', icone: 'inicio', roles: TODOS },
+            { label: tr('Captação'), path: '/captacao', icone: 'captacao', roles: TODOS },
+            { label: tr('Leads'), path: '/leads', icone: 'leads', roles: TODOS },
+        ],
+    },
+    {
+        titulo: tr('Super Admin'),
+        itens: [
+            { label: tr('Contas'), path: '/contas', icone: 'empresas', roles: ['super_admin'] },
+        ],
+    },
+    {
+        titulo: tr('Conta'),
+        itens: [
+            { label: tr('Remetentes'), path: '/remetentes', icone: 'email', roles: ['admin', 'super_admin'] },
+            { label: tr('Minha conta'), path: '/minha-conta', icone: 'usuarios', roles: TODOS },
+        ],
+    },
+]
+
+export function Sidebar({ aberto = false, onFechar }) {
+    const { user, hasRole, logout } = useAuthContext()
+
+    async function handleLogout() {
+        await logout()
+    }
+
+    const grupos = GRUPOS
+        .map((grupo) => ({ ...grupo, itens: grupo.itens.filter((item) => item.roles.some((role) => hasRole(role))) }))
+        .filter((grupo) => grupo.itens.length > 0)
+
+    return (
+        <aside id="menu-principal" className={`sidebar${aberto ? ' is-aberto' : ''}`} aria-label={tr('Menu principal')}>
+            <div className="sidebar__topo">
+                <Link to="/home" className="marca-link" aria-label={tr('Ir para o início')} onClick={onFechar}>
+                    <Marca empresa={user?.nomeEmpresa} />
+                </Link>
+                <button type="button" className="icon-btn sidebar__fechar" aria-label={tr('Fechar menu')} onClick={onFechar}>
+                    <IconeX />
+                </button>
+            </div>
+
+            <nav className="sidebar__nav">
+                {grupos.map((grupo) => (
+                    <div className="sidebar__grupo" key={grupo.titulo}>
+                        <span className="sidebar__titulo">{grupo.titulo}</span>
+                        <ul>
+                            {grupo.itens.map((item) => (
+                                <li key={item.path}>
+                                    <NavLink to={item.path} className="sidebar__link" onClick={onFechar}>
+                                        <Icone>{ICONES[item.icone]}</Icone>
+                                        <span>{item.label}</span>
+                                    </NavLink>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
+            </nav>
+
+            <div className="sidebar__rodape">
+                <BotaoInstalar />
+
+                <div className="sidebar__usuario">
+                    <span className="sidebar__avatar" aria-hidden="true">{iniciais(user?.nomeCompleto)}</span>
+                    <span className="sidebar__usuario-dados">
+                        <strong>{user?.nomeCompleto}</strong>
+                        <span>{ROTULO_FUNCAO[user?.role] ?? user?.role}</span>
+                    </span>
+                </div>
+
+                <div className="sidebar__idioma">
+                    <IdiomaToggle />
+                </div>
+
+                <div className="sidebar__acoes">
+                    <ThemeToggle />
+                    <button type="button" className="btn btn--ghost btn--sm sidebar__sair" onClick={handleLogout}>
+                        <Icone>{ICONES.sair}</Icone>
+                        {tr('Sair')}
+                    </button>
+                </div>
+            </div>
+        </aside>
+    )
+}
+
+export default Sidebar

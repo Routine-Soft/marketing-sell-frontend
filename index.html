@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#4f46e5" />
+    <meta name="apple-mobile-web-app-title" content="Marketing Sell" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marketing Sell · Captação de clientes</title>
+    <meta name="description" content="Encontre empresas e profissionais nos EUA para vender seus serviços: NPI, Google Maps, empresas recém-abertas e prestadores licenciados." />
+    <script>
+      try {
+        var t = localStorage.getItem('theme-preference');
+        document.documentElement.dataset.theme = ['light', 'rosa', 'dark'].indexOf(t) >= 0 ? t : 'system';
+      } catch (e) {
+        document.documentElement.dataset.theme = 'system';
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

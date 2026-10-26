@@ -1,0 +1,169 @@
+import { lerIdioma } from '@/i18n/idioma'
+import { tr } from '@/i18n';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'
+
+class TokenManager {
+  getAccessToken() {
+    return localStorage.getItem('accessToken')
+  }
+
+  getRefreshToken() {
+    return localStorage.getItem('refreshToken')
+  }
+
+  setTokens(accessToken, refreshToken) {
+    localStorage.setItem('accessToken', accessToken)
+    localStorage.setItem('refreshToken', refreshToken)
+  }
+
+  clearTokens() {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+  }
+
+  // Conteúdo do token de acesso (id, role, via...), ou null sem sessão.
+  getPayload() {
+    try {
+      return JSON.parse(atob(this.getAccessToken().split('.')[1]))
+    } catch {
+      return null
+    }
+  }
+
+  isTokenExpired(token) {
+    if (!token) return true
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]))
+      return payload.exp * 1000 < Date.now()
+    } catch {
+      return true
+    }
+  }
+}
+
+const tokenManager = new TokenManager()
+
+async function fetchComRetry(url, options, tentativas = 5, atrasoMs = 600) {
+  for (let tentativa = 1; tentativa <= tentativas; tentativa++) {
+    try {
+      return await fetch(url, options)
+    } catch (error) {
+      if (tentativa === tentativas) throw error
+      await new Promise((resolve) => setTimeout(resolve, atrasoMs))
+    }
+  }
+}
+
+async function makeRequest(url, options = {}) {
+  // A API responde os avisos e erros no idioma escolhido.
+  const headers = {
+    'Accept-Language': lerIdioma(),
+    ...options.headers,
+  }
+
+  if (options.body) {
+    headers['Content-Type'] = 'application/json'
+  }
+
+  // Quem manda o próprio Authorization não usa a sessão do usuário.
+  const usaSessao = !headers['Authorization']
+  const accessToken = tokenManager.getAccessToken()
+  if (accessToken && usaSessao) {
+    headers['Authorization'] = `Bearer ${accessToken}`
+  }
+
+  try {
+    const response = await fetchComRetry(`${API_BASE_URL}${url}`, {
+      ...options,
+      headers,
+    })
+
+    if (response.status === 401 && usaSessao) {
+      const refreshToken = tokenManager.getRefreshToken()
+      if (refreshToken) {
+        try {
+          const refreshResponse = await fetch(`${API_BASE_URL}/users/refresh`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refreshToken }),
+          })
+
+          if (refreshResponse.ok) {
+            const data = await refreshResponse.json()
+            tokenManager.setTokens(data.data.accessToken, refreshToken)
+
+            // Refaz o pedido com o token novo pelo mesmo caminho (devolve o JSON e trata erro como os outros).
+            return makeRequest(url, {
+              ...options,
+              headers: { ...options.headers, Authorization: `Bearer ${data.data.accessToken}` },
+            })
+          } else {
+            tokenManager.clearTokens()
+            window.location.href = '/#/login'
+          }
+        } catch (error) {
+          console.error('Erro ao renovar token:', error)
+          tokenManager.clearTokens()
+          window.location.href = '/#/login'
+        }
+      }
+    }
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({
+        message: tr('HTTP Error: {status}', { status: response.status }),
+      }))
+
+      throw {
+        status: response.status,
+        code: errorData.code,
+        message: errorData.message || tr('Erro na requisição'),
+        data: errorData,
+      }
+    }
+
+    if (response.status === 204) {
+      return {}
+    }
+
+    return response.json()
+  } catch (error) {
+    console.error('Erro na requisição:', error)
+    throw error
+  }
+}
+
+export const httpClient = {
+  // `opcoes.headers` permite mandar outro Authorization.
+  get: (url, opcoes = {}) => makeRequest(url, { method: 'GET', headers: opcoes.headers }),
+
+  post: (url, body, opcoes = {}) =>
+    makeRequest(url, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: opcoes.headers,
+    }),
+
+  patch: (url, body) =>
+    makeRequest(url, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+    }),
+
+  put: (url, body) =>
+    makeRequest(url, {
+      method: 'PUT',
+      body: JSON.stringify(body),
+    }),
+
+  delete: (url, body) =>
+    makeRequest(url, {
+      method: 'DELETE',
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    }),
+
+  tokenManager,
+}
+
+export default httpClient

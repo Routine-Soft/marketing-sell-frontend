@@ -1,0 +1,221 @@
+.leads {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  min-width: 0;
+}
+
+.leads__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.leads__filtros > select {
+  flex: 1 1 140px;
+  min-width: 0;
+}
+
+.leads__busca {
+  flex: 1 1 100%;
+}
+
+.leads__aviso-busca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0;
+}
+
+.leads__lote {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: var(--primary-soft);
+  animation: slideDown 0.25s var(--ease) backwards;
+}
+
+.leads__skeleton {
+  display: grid;
+  gap: 8px;
+}
+
+.leads__tabela td {
+  vertical-align: top;
+}
+
+.leads__tabela td > a,
+.leads__tabela td > small,
+.leads__tabela td > .badge {
+  display: block;
+  width: fit-content;
+}
+
+.leads__tabela td > * + * {
+  margin-top: 4px;
+}
+
+.leads__tabela small {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.leads__linha {
+  animation: fadeIn 0.3s var(--ease) backwards;
+  animation-delay: calc(var(--i) * 25ms);
+}
+
+.leads__check {
+  width: 36px;
+}
+
+.leads__check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+}
+
+.leads__nome {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.leads__nome:hover {
+  color: var(--primary);
+}
+
+.leads__fonte {
+  font-size: 0.7rem;
+}
+
+.leads__td-contato {
+  min-width: 230px;
+}
+
+.leads__email,
+.leads__site {
+  max-width: 280px;
+  overflow-wrap: break-word;
+  font-size: 0.875rem;
+}
+
+.leads__enviado {
+  font-size: 0.75rem;
+}
+
+.leads__lote .btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.leads__status {
+  min-width: 130px;
+  padding-block: 6px;
+  font-size: 0.875rem;
+}
+
+.leads__status[data-status='cliente'] {
+  color: var(--success);
+  border-color: var(--success);
+}
+
+.leads__status[data-status='interessado'] {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.leads__status[data-status='descartado'] {
+  color: var(--text-subtle);
+}
+
+.leads__paginacao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.lead-detalhes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: 12px 16px;
+  margin: 0 0 4px;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.lead-detalhes dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.lead-detalhes dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.lead-detalhes__largo {
+  grid-column: 1 / -1;
+}
+
+/* Celular: cada lead vira um cartão (sem tabela larga). */
+@media (max-width: 640px) {
+  .leads__tabela thead {
+    display: none;
+  }
+
+  .leads__tabela,
+  .leads__tabela tbody {
+    display: block;
+    min-width: 0;
+  }
+
+  .leads__tabela td.leads__td-acoes {
+    text-align: right;
+  }
+
+  .leads__tabela tr.leads__linha {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'check empresa acoes'
+      'check contato contato'
+      'check local situacao';
+    gap: 8px 10px;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .leads__tabela tr.leads__linha td {
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+
+  .leads__tabela td.leads__check { grid-area: check; }
+  .leads__tabela td.leads__td-empresa { grid-area: empresa; }
+  .leads__tabela td.leads__td-contato { grid-area: contato; }
+  .leads__tabela td.leads__td-local { grid-area: local; align-self: center; color: var(--text-muted); font-size: 0.875rem; }
+  .leads__tabela td.leads__td-situacao { grid-area: situacao; }
+  .leads__tabela td.leads__td-acoes { grid-area: acoes; }
+
+  .leads__email,
+  .leads__site {
+    max-width: none;
+  }
+}
