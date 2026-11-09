@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import { buscarOpcoes, fazerBusca, listarBuscas } from './captacao.api'
+import { buscarOpcoes, fazerBusca } from './captacao.api'
 
 export function useCaptacao() {
     const [opcoes, setOpcoes] = useState(null)
-    const [historico, setHistorico] = useState([])
     const [carregando, setCarregando] = useState(true)
     const [erroCarregar, setErroCarregar] = useState(null)
     const [buscando, setBuscando] = useState(false)
@@ -12,12 +11,8 @@ export function useCaptacao() {
 
     useEffect(() => {
         let ignore = false
-        Promise.all([buscarOpcoes(), listarBuscas()])
-            .then(([op, hist]) => {
-                if (ignore) return
-                setOpcoes(op.data)
-                setHistorico(hist.data)
-            })
+        buscarOpcoes()
+            .then((op) => { if (!ignore) setOpcoes(op.data) })
             .catch((e) => { if (!ignore) setErroCarregar(e) })
             .finally(() => { if (!ignore) setCarregando(false) })
         return () => { ignore = true }
@@ -31,7 +26,6 @@ export function useCaptacao() {
             const resposta = await fazerBusca({ fonte, filtros, buscarEmails })
             const { busca } = resposta.data
             setResultado({ ...resposta.data, message: resposta.message })
-            setHistorico((atual) => [busca, ...atual])
             if (busca.requisicoesGoogle) {
                 setOpcoes((atual) => {
                     const usado = atual.cotaGoogle.usado + busca.requisicoesGoogle
@@ -45,5 +39,5 @@ export function useCaptacao() {
         }
     }
 
-    return { opcoes, historico, carregando, erroCarregar, buscando, erro, resultado, buscar }
+    return { opcoes, carregando, erroCarregar, buscando, erro, resultado, buscar }
 }

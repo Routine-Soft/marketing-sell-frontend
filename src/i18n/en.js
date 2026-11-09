@@ -142,12 +142,6 @@ export default {
   'Buscando...': 'Searching...',
   '{n} sites na fila para procurar e-mail': '{n} websites queued for email search',
   'Ver os leads desta busca': 'See the leads from this search',
-  'Últimas buscas': 'Recent searches',
-  'Nenhuma busca ainda': 'No searches yet',
-  'Escolha uma fonte acima para fazer a primeira.': 'Choose a source above to run your first one.',
-  '{n} novos': '{n} new',
-  '{n} encontrados': '{n} found',
-  'Ver leads': 'See leads',
   'Estado': 'State',
   'Cidade': 'City',
   'Cidade (opcional)': 'City (optional)',
@@ -268,7 +262,7 @@ export default {
   'E-mails enviados hoje por {email}': 'Emails sent today by {email}',
 
   // Envio de e-mail
-  'Excluir uma conta apaga os usuários, os leads, o histórico de buscas, os remetentes e os e-mails enviados dela. Não tem como desfazer.': "Deleting an account removes its users, leads, search history, senders and sent emails. This can't be undone.",
+  'Excluir uma conta apaga os usuários, os leads, as buscas, os remetentes e os e-mails enviados dela. Não tem como desfazer.': "Deleting an account removes its users, leads, searches, senders and sent emails. This can't be undone.",
   'Olá, {contato}! Vi a {nome} aqui em {cidade} e...': 'Hi {contato}! I came across {nome} in {cidade} and...',
   'Use {nome}, {contato} e {cidade} para personalizar: viram os dados de cada lead. Pode usar HTML simples, como <b>.': 'Use {nome}, {contato} and {cidade} to personalize: they become each lead\'s details. Simple HTML like <b> is allowed.',
   'Rodapé': 'Footer',

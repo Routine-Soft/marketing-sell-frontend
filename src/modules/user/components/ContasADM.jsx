@@ -120,7 +120,7 @@ export default function ContasADM() {
             </table>
           </div>
         )}
-        <p className="contas-adm__nota">{tr('Excluir uma conta apaga os usuários, os leads, o histórico de buscas, os remetentes e os e-mails enviados dela. Não tem como desfazer.')}</p>
+        <p className="contas-adm__nota">{tr('Excluir uma conta apaga os usuários, os leads, as buscas, os remetentes e os e-mails enviados dela. Não tem como desfazer.')}</p>
       </section>
 
       {editandoCota && (

@@ -40,24 +40,8 @@ export function rotuloDaOpcao(opcao) {
     return opcao?.[idiomaAtual()] ?? opcao?.pt ?? opcao?.valor ?? ''
 }
 
-// Uma linha que resume a busca no histórico: "Massage Therapist · Santa Monica, CA".
-export function resumoDosFiltros(busca) {
-    const f = busca.filtros ?? {}
-    const partes = {
-        npi: [f.especialidade, [f.cidade, f.estado].filter(Boolean).join(', '), f.cep],
-        google: [f.termo, f.local],
-        empresas_novas: [f.palavra && `"${f.palavra}"`, [f.cidade, f.estado].filter(Boolean).join(', '), f.desde && tr('desde {data}', { data: formatarData(f.desde) })],
-        licencas: [f.tipo, [f.cidade || f.condado, f.estado].filter(Boolean).join(', '), f.palavra && `"${f.palavra}"`],
-    }[busca.fonte] ?? []
-    return partes.filter(Boolean).join(' · ')
-}
-
 export function formatarData(valor) {
     if (!valor) return ''
     const data = /^\d{4}-\d{2}-\d{2}$/.test(valor) ? new Date(`${valor}T12:00:00`) : new Date(valor)
     return data.toLocaleDateString(localeAtual())
-}
-
-export function formatarDataHora(valor) {
-    return new Date(valor).toLocaleString(localeAtual(), { dateStyle: 'short', timeStyle: 'short' })
 }

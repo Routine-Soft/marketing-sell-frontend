@@ -1,12 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import FiltrosDaFonte from './FiltrosDaFonte'
-import EstadoVazio from '@/components/EstadoVazio/EstadoVazio'
 import { Icone } from '@/components/CrudCard/icones'
-import { ICONES } from '@/components/Sidebar/menuIcones'
 import { useCaptacao } from '../captacao.hooks'
-import { FILTROS_INICIAIS, FONTES, formatarDataHora, resumoDosFiltros } from '../captacao.utils'
-import { localeAtual, tr } from '@/i18n'
+import { FILTROS_INICIAIS, FONTES } from '../captacao.utils'
+import { tr } from '@/i18n'
 import './captacao.css'
 
 const ICONES_FONTE = {
@@ -33,7 +31,7 @@ function CotaGoogle({ cota }) {
 }
 
 export default function Captacao() {
-  const { opcoes, historico, carregando, erroCarregar, buscando, erro, resultado, buscar } = useCaptacao()
+  const { opcoes, carregando, erroCarregar, buscando, erro, resultado, buscar } = useCaptacao()
   const [fonte, setFonte] = useState(null)
   const [filtros, setFiltros] = useState({})
   const [buscarEmails, setBuscarEmails] = useState(true)
@@ -129,35 +127,6 @@ export default function Captacao() {
               )}
             </div>
           )}
-
-          <section className="card captacao-historico">
-            <h3 className="form-card__title">{tr('Últimas buscas')}</h3>
-            {historico.length === 0 ? (
-              <EstadoVazio icone={ICONES.captacao} titulo={tr('Nenhuma busca ainda')} texto={tr('Escolha uma fonte acima para fazer a primeira.')} />
-            ) : (
-              <ul className="historico stagger">
-                {historico.map((b) => (
-                  <li key={b._id} className="historico__item">
-                    <span className="historico__icone" aria-hidden="true"><Icone>{ICONES_FONTE[b.fonte]}</Icone></span>
-                    <span className="historico__textos">
-                      <strong>{FONTES[b.fonte]?.nome ?? b.fonte}</strong>
-                      <span>{resumoDosFiltros(b)}</span>
-                      <small>{formatarDataHora(b.createdAt)}</small>
-                    </span>
-                    <span className="historico__numeros">
-                      <span className="badge badge--primary">
-                        {tr('{n} novos', { n: b.novos.toLocaleString(localeAtual()) })}
-                      </span>
-                      <small>{tr('{n} encontrados', { n: b.encontrados.toLocaleString(localeAtual()) })}</small>
-                    </span>
-                    {b.encontrados > 0 && (
-                      <Link className="link historico__link" to={`/leads?buscaId=${b._id}`}>{tr('Ver leads')}</Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
         </>
       )}
     </div>
