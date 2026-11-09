@@ -116,7 +116,7 @@ export default function EnviarEmailModal({ ids, onEnviado, onClose }) {
               <textarea id="envio-corpo" className="input textarea" rows={9} value={form.corpo}
                 onChange={(e) => mudar('corpo', e.target.value)} required />
               <p className="field__hint">
-                {tr('Use {nome}, {contato} e {cidade} para personalizar: viram os dados de cada lead. Mudar aqui vale só para este envio.')}
+                {tr('Use {nome}, {contato}, {cidade} e {estado} para personalizar: viram os dados de cada lead. Mudar aqui vale só para este envio.')}
               </p>
             </div>
 

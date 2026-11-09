@@ -123,7 +123,7 @@ export default function RemetenteModal({ remetente, erro, onSave, onClose }) {
               placeholder={tr('Olá, {contato}! Vi a {nome} aqui em {cidade} e...')}
             />
             <p className="field__hint">
-              {tr('Use {nome}, {contato} e {cidade} para personalizar: viram os dados de cada lead. Pode usar HTML simples, como <b>.')}
+              {tr('Use {nome}, {contato}, {cidade} e {estado} para personalizar: viram os dados de cada lead. Pode usar HTML simples, como <b>.')}
             </p>
           </div>
 

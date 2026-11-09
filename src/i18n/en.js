@@ -264,7 +264,7 @@ export default {
   // Envio de e-mail
   'Excluir uma conta apaga os usuários, os leads, as buscas, os remetentes e os e-mails enviados dela. Não tem como desfazer.': "Deleting an account removes its users, leads, searches, senders and sent emails. This can't be undone.",
   'Olá, {contato}! Vi a {nome} aqui em {cidade} e...': 'Hi {contato}! I came across {nome} in {cidade} and...',
-  'Use {nome}, {contato} e {cidade} para personalizar: viram os dados de cada lead. Pode usar HTML simples, como <b>.': 'Use {nome}, {contato} and {cidade} to personalize: they become each lead\'s details. Simple HTML like <b> is allowed.',
+  'Use {nome}, {contato}, {cidade} e {estado} para personalizar: viram os dados de cada lead. Pode usar HTML simples, como <b>.': 'Use {nome}, {contato}, {cidade} and {estado} to personalize: they become each lead\'s details. Simple HTML like <b> is allowed.',
   'Rodapé': 'Footer',
   'Ex.: Stanley Andrade · 123 Main St, Austin, TX 78701 · Se não quiser receber mais, é só responder "remover".': 'E.g. Stanley Andrade · 123 Main St, Austin, TX 78701 · To stop receiving these emails, just reply "remove".',
   'Vai em letra pequena no fim de todo e-mail. A lei dos EUA (CAN-SPAM) pede endereço físico e um jeito de pedir para não receber mais.': 'Shown in small print at the end of every email. US law (CAN-SPAM) requires a physical address and a way to opt out.',
@@ -284,7 +284,7 @@ export default {
   'Cadastrar remetente': 'Add sender',
   'Remetente': 'Sender',
   'Texto do e-mail': 'Email text',
-  'Use {nome}, {contato} e {cidade} para personalizar: viram os dados de cada lead. Mudar aqui vale só para este envio.': 'Use {nome}, {contato} and {cidade} to personalize: they become each lead\'s details. Changes here only apply to this send.',
+  'Use {nome}, {contato}, {cidade} e {estado} para personalizar: viram os dados de cada lead. Mudar aqui vale só para este envio.': 'Use {nome}, {contato}, {cidade} and {estado} to personalize: they become each lead\'s details. Changes here only apply to this send.',
   'Rodapé que vai no final': 'Footer added at the end',
   'Este remetente está sem rodapé. A lei dos EUA (CAN-SPAM) pede endereço físico e um jeito de pedir para não receber mais. Dá para colocar em Remetentes.': 'This sender has no footer. US law (CAN-SPAM) requires a physical address and a way to opt out. You can add it under Senders.',
   'Enviar para 1 lead': 'Send to 1 lead',
