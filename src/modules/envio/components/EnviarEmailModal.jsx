@@ -4,7 +4,7 @@ import ModalForm from '@/components/Modal/ModalForm'
 import EstadoVazio from '@/components/EstadoVazio/EstadoVazio'
 import { ICONES } from '@/components/Sidebar/menuIcones'
 import { useEnvioDeEmail } from '../envio.hooks'
-import { cabemHoje, quantosVaoReceber, tempoEstimado } from '../envio.utils'
+import { cabemHoje, quantosVaoReceber, tempoEstimado, textoDaPausa } from '../envio.utils'
 import { tr } from '@/i18n'
 import './envio.css'
 
@@ -34,6 +34,7 @@ function Resumo({ previa, reenviar, onReenviar }) {
           {tr('Gmail hoje: {usado} de {limite} usados', { usado: previa.cota.usado, limite: previa.cota.limite })}
           {previa.cota.naFila > 0 && ` · ${tr('{n} na fila', { n: previa.cota.naFila })}`}
         </li>
+        {previa.cota.pausadoAte && <li>{textoDaPausa(previa.cota)}</li>}
         {vao > 0 && <li>{tr('Sai um e-mail a cada 30 a 60 segundos: leva {tempo}.', { tempo: tempoEstimado(vao + previa.cota.naFila) })}</li>}
       </ul>
 

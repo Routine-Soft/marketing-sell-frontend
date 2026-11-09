@@ -59,6 +59,19 @@
   background: var(--danger);
 }
 
+.cota-gmail__pausa {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  line-height: 1.5;
+  font-size: 0.85rem;
+}
+
+.cota-gmail__pausa small {
+  opacity: 0.85;
+  overflow-wrap: anywhere;
+}
+
 .cota-gmail__fila {
   display: flex;
   align-items: center;

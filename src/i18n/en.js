@@ -105,6 +105,8 @@ export default {
   'Um resumo da sua captação de clientes': 'A summary of your prospecting',
   'Nova busca': 'New search',
   'Com e-mail': 'With email',
+  'O Gmail recusou novos envios por limite de envio em {em}. A fila volta sozinha em {ate}.': 'Gmail refused new emails due to its sending limit on {em}. The queue resumes on its own on {ate}.',
+  'Resposta do Gmail: {resposta}': 'Gmail reply: {resposta}',
   'Só Gmail e Yahoo': 'Gmail and Yahoo only',
   'Com telefone': 'With phone',
   'Procurando e-mail': 'Looking for email',

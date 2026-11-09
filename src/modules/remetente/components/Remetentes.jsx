@@ -6,6 +6,7 @@ import { IconeLapis, IconeMais } from '@/components/CrudCard/icones'
 import { ICONES } from '@/components/Sidebar/menuIcones'
 import { useCotasGmail, useRemetentes } from '../remetente.hooks'
 import { tr } from '@/i18n'
+import { textoDaPausa } from '@/modules/envio/envio.utils'
 import './remetente.css'
 
 function CotasGmail({ cotas, onCancelarFila }) {
@@ -33,6 +34,12 @@ function CotasGmail({ cotas, onCancelarFila }) {
               >
                 <span style={{ width: `${porcentagem}%` }} />
               </div>
+              {c.pausadoAte && (
+                <div className="alert alert--warning cota-gmail__pausa" role="status">
+                  <span>{textoDaPausa(c)}</span>
+                  {c.pausaResposta && <small>{tr('Resposta do Gmail: {resposta}', { resposta: c.pausaResposta })}</small>}
+                </div>
+              )}
               {c.naFila > 0 && (
                 <div className="cota-gmail__fila">
                   <span className="badge badge--info badge--live">{tr('{n} na fila', { n: c.naFila })}</span>
