@@ -151,6 +151,7 @@ export default function Leads() {
           <select className="input" value={filtros.comEmail} onChange={(e) => mudarFiltro('comEmail', e.target.value)} aria-label={tr('E-mail')}>
             <option value="">{tr('E-mail: todos')}</option>
             <option value="sim">{tr('Com e-mail')}</option>
+            <option value="gmail_yahoo">{tr('Só Gmail e Yahoo')}</option>
             <option value="nao">{tr('Sem e-mail')}</option>
           </select>
           <select className="input" value={filtros.comTelefone} onChange={(e) => mudarFiltro('comTelefone', e.target.value)} aria-label={tr('Telefone')}>

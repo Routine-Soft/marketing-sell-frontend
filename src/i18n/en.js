@@ -105,6 +105,7 @@ export default {
   'Um resumo da sua captação de clientes': 'A summary of your prospecting',
   'Nova busca': 'New search',
   'Com e-mail': 'With email',
+  'Só Gmail e Yahoo': 'Gmail and Yahoo only',
   'Com telefone': 'With phone',
   'Procurando e-mail': 'Looking for email',
   'Como funciona': 'How it works',
