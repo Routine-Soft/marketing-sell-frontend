@@ -272,6 +272,7 @@ export default {
   'Cancelar o que está na fila': 'Cancel what is queued',
   'Cancelar a fila?': 'Cancel the queue?',
   'Enviar e-mail': 'Send email',
+  'Enviar e-mail para {nome}': 'Send email to {nome}',
   'Na fila de envio': 'Queued to send',
   'Falha no envio': 'Sending failed',
   'E-mail enviado em {data} · {negocio}': 'Email sent on {data} · {negocio}',

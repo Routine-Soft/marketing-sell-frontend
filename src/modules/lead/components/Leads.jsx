@@ -232,6 +232,12 @@ export default function Leads() {
                     </td>
                     <td className="leads__td-acoes">
                       <div className="table__actions">
+                        {podeEnviar && lead.email && (
+                          <button type="button" className="icon-btn" onClick={() => setEnviarPara([lead._id])}
+                            aria-label={tr('Enviar e-mail para {nome}', { nome: lead.nome })} title={tr('Enviar e-mail')}>
+                            <Icone>{ICONES.email}</Icone>
+                          </button>
+                        )}
                         <button type="button" className="icon-btn" aria-label={tr('Ver e editar')} title={tr('Ver e editar')} onClick={() => setAberto(lead)}>
                           <IconeLapis />
                         </button>
