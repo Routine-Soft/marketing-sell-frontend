@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { atualizarLead, excluirLead, excluirLeads, exportarLeads, listarLeads, procurarEmails, resumoDosLeads } from './lead.api'
+import { atualizarLead, criarLead, excluirLead, excluirLeads, exportarLeads, listarLeads, procurarEmails, registrarContato, resumoDosLeads } from './lead.api'
 import { baixarArquivo, emAndamento, montarQuery } from './lead.utils'
 
 const POR_PAGINA = 25
@@ -64,7 +64,9 @@ export function useLeads(filtros, pagina) {
         erro,
         sucesso,
         exportando,
+        criar: (dados) => executar(() => criarLead(dados), recarregar),
         salvar: (id, campos) => executar(() => atualizarLead(id, campos), (r) => trocarLead(r.data)),
+        registrarContato: (id, canal) => executar(() => registrarContato(id, canal), (r) => trocarLead(r.data)),
         excluir: (id) => executar(() => excluirLead(id), recarregar),
         excluirVarios: (ids) => executar(() => excluirLeads(ids), recarregar),
         procurarEmails: (ids) => executar(() => procurarEmails(ids), recarregar),

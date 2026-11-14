@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Sidebar from '@/components/Sidebar/Sidebar'
 import Marca from '@/components/Sidebar/Marca'
+import { abaDoCaminho } from '@/components/Sidebar/abas'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import './MainLayout.css'
 import { tr } from '@/i18n';
@@ -9,6 +10,8 @@ import { tr } from '@/i18n';
 export function MainLayout({ children }) {
     const { user } = useAuthContext()
     const [menuAberto, setMenuAberto] = useState(false)
+    // Cada tela usa a cor da sua aba (cabeçalho da grade, faixa do título).
+    const aba = abaDoCaminho(useLocation().pathname)
 
     useEffect(() => {
         if (!menuAberto) return undefined
@@ -52,9 +55,11 @@ export function MainLayout({ children }) {
             <Sidebar aberto={menuAberto} onFechar={() => setMenuAberto(false)} />
             {menuAberto && <div className="app-overlay" onClick={() => setMenuAberto(false)} aria-hidden="true" />}
 
-            <main id="conteudo" className="app-main">
-                {children}
-            </main>
+            <div className="app-conteudo" style={aba ? { '--aba-cor': aba.cor } : undefined}>
+                <main id="conteudo" className="app-main">
+                    {children}
+                </main>
+            </div>
         </div>
     )
 }

@@ -3,10 +3,31 @@ import { tr } from '@/i18n'
 export const STATUS = [
     { valor: 'novo', rotulo: tr('Novo'), tom: 'info' },
     { valor: 'contatado', rotulo: tr('Contatado'), tom: 'warning' },
+    { valor: 'respondeu', rotulo: tr('Respondeu'), tom: 'primary' },
     { valor: 'interessado', rotulo: tr('Interessado'), tom: 'primary' },
+    { valor: 'demo', rotulo: tr('Demo marcada'), tom: 'primary' },
+    { valor: 'teste_gratis', rotulo: tr('Teste grátis'), tom: 'primary' },
     { valor: 'cliente', rotulo: tr('Cliente'), tom: 'success' },
-    { valor: 'descartado', rotulo: tr('Descartado'), tom: 'danger' },
+    { valor: 'descartado', rotulo: tr('Perdido'), tom: 'danger' },
 ]
+
+// Por onde a pessoa falou com o lead (o contato conta para o follow-up de 3, 7 e 14 dias).
+export const CANAIS_CONTATO = [
+    { valor: 'ligacao', rotulo: tr('Ligação') },
+    { valor: 'whatsapp', rotulo: 'WhatsApp' },
+    { valor: 'email', rotulo: tr('E-mail') },
+    { valor: 'dm', rotulo: tr('Mensagem na rede social') },
+    { valor: 'visita', rotulo: tr('Visita') },
+]
+
+const SEM_RESPOSTA = ['novo', 'contatado']
+
+// 'vencido' = já passou do dia do follow-up; 'encerrar' = 4 contatos sem resposta; '' = nada a fazer agora.
+export function situacaoDoFollowUp(lead) {
+    if (!SEM_RESPOSTA.includes(lead.status)) return ''
+    if (lead.proximoFollowUpEm) return new Date(lead.proximoFollowUpEm) <= new Date() ? 'vencido' : 'marcado'
+    return lead.numeroContatos >= 4 ? 'encerrar' : ''
+}
 
 export const ROTULO_EMAIL = {
     nao_buscado: tr('Sem e-mail'),
@@ -21,6 +42,7 @@ export const ROTULO_FONTE = {
     google: 'Google',
     empresas_novas: tr('Empresa nova'),
     licencas: tr('Licença'),
+    manual: tr('Cadastro manual'),
 }
 
 // Nomes legíveis dos dados extras de cada fonte.
@@ -38,7 +60,7 @@ export const ROTULO_EXTRA = {
     validade: tr('Validade da licença'),
 }
 
-export const FILTROS_VAZIOS = { busca: '', fonte: '', status: '', estado: '', comEmail: '', comTelefone: '', buscaId: '' }
+export const FILTROS_VAZIOS = { busca: '', fonte: '', status: '', estado: '', comEmail: '', comTelefone: '', buscaId: '', followUp: '' }
 
 export function montarQuery(filtros, pagina, porPagina) {
     const params = new URLSearchParams()

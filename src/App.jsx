@@ -8,8 +8,13 @@ import MinhaConta from '@/modules/user/components/MinhaConta'
 import ContasADM from '@/modules/user/components/ContasADM'
 import Captacao from '@/modules/captacao/components/Captacao'
 import Leads from '@/modules/lead/components/Leads'
+import RotinaDiaria from '@/modules/rotina/components/RotinaDiaria'
+import Painel from '@/modules/rotina/components/Painel'
+import Parceiros from '@/modules/parceiro/components/Parceiros'
+import Comunidades from '@/modules/comunidade/components/Comunidades'
+import Preparacao from '@/modules/checklist/components/Preparacao'
+import Anuncios from '@/modules/checklist/components/Anuncios'
 import Remetentes from '@/modules/remetente/components/Remetentes'
-import Home from '@/pages/Home/Home'
 
 function Protegida({ roles, children }) {
   return (
@@ -27,7 +32,12 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
 
-          <Route path="/home" element={<Protegida><Home /></Protegida>} />
+          <Route path="/home" element={<Protegida><RotinaDiaria /></Protegida>} />
+          <Route path="/painel" element={<Protegida><Painel /></Protegida>} />
+          <Route path="/parceiros" element={<Protegida><Parceiros /></Protegida>} />
+          <Route path="/preparacao" element={<Protegida><Preparacao /></Protegida>} />
+          <Route path="/comunidades" element={<Protegida><Comunidades /></Protegida>} />
+          <Route path="/anuncios" element={<Protegida><Anuncios /></Protegida>} />
           <Route path="/captacao" element={<Protegida><Captacao /></Protegida>} />
           <Route path="/leads" element={<Protegida><Leads /></Protegida>} />
           <Route path="/remetentes" element={<Protegida roles={['admin', 'super_admin']}><Remetentes /></Protegida>} />

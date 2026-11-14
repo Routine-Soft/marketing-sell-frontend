@@ -1,5 +1,6 @@
 import './styles/theme.css'
 import './styles/ui.css'
+import './styles/planilha.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'

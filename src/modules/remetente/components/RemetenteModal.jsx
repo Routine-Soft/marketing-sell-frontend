@@ -5,6 +5,9 @@ import CampoSenha from '@/components/CampoSenha/CampoSenha'
 import { normalizarEmail } from '@/utils/email'
 import { tr } from '@/i18n'
 
+// 2º, 3º e 4º e-mail: saem sozinhos 3, 7 e 14 dias depois do primeiro, para quem não respondeu.
+const FOLLOW_UPS = [tr('2º e-mail (3 dias depois)'), tr('3º e-mail (7 dias depois)'), tr('4º e-mail (14 dias depois)')]
+
 export default function RemetenteModal({ remetente, erro, onSave, onClose }) {
   const editando = !!remetente
   const [form, setForm] = useState({
@@ -16,10 +19,16 @@ export default function RemetenteModal({ remetente, erro, onSave, onClose }) {
     corpoPadrao: remetente?.corpoPadrao ?? '',
     rodape: remetente?.rodape ?? '',
     ativo: remetente?.ativo ?? true,
+    followUpAtivo: remetente?.followUpAtivo ?? false,
+    followUps: FOLLOW_UPS.map((_, i) => ({ assunto: remetente?.followUps?.[i]?.assunto ?? '', corpo: remetente?.followUps?.[i]?.corpo ?? '' })),
   })
 
   function mudar(campo, valor) {
     setForm((atual) => ({ ...atual, [campo]: valor }))
+  }
+
+  function mudarFollowUp(indice, campo, valor) {
+    setForm((atual) => ({ ...atual, followUps: atual.followUps.map((item, i) => (i === indice ? { ...item, [campo]: valor } : item)) }))
   }
 
   function montarPayload() {
@@ -29,6 +38,8 @@ export default function RemetenteModal({ remetente, erro, onSave, onClose }) {
       assuntoPadrao: form.assuntoPadrao,
       corpoPadrao: form.corpoPadrao,
       rodape: form.rodape,
+      followUpAtivo: form.followUpAtivo,
+      followUps: form.followUps,
     }
     if (!editando) dados.nomeNegocio = form.nomeNegocio.trim()
     if (editando) dados.ativo = form.ativo
@@ -141,6 +152,38 @@ export default function RemetenteModal({ remetente, erro, onSave, onClose }) {
               {tr('Vai em letra pequena no fim de todo e-mail. A lei dos EUA (CAN-SPAM) pede endereço físico e um jeito de pedir para não receber mais.')}
             </p>
           </div>
+
+          <fieldset className="modal-form__section">
+            <legend>{tr('Follow-up automático')}</legend>
+            <button type="button" role="switch" aria-checked={form.followUpAtivo} className="switch" onClick={() => mudar('followUpAtivo', !form.followUpAtivo)}>
+              <span className="switch__track" aria-hidden="true" />
+              {form.followUpAtivo ? tr('Follow-up por e-mail ligado') : tr('Follow-up por e-mail desligado')}
+            </button>
+            <p className="field__hint">
+              {tr('Quem recebeu o primeiro e-mail deste negócio e não respondeu recebe os próximos sozinho. Quando o lead responde, os follow-ups param e você é avisado no Telegram. Texto em branco = aquele e-mail não sai.')}
+            </p>
+            {form.followUpAtivo && FOLLOW_UPS.map((titulo, i) => (
+              <div className="field" key={titulo}>
+                <label className="field__label" htmlFor={`remetente-follow-up-${i}`}>{titulo}</label>
+                <input
+                  className="input"
+                  type="text"
+                  value={form.followUps[i].assunto}
+                  onChange={(e) => mudarFollowUp(i, 'assunto', e.target.value)}
+                  placeholder={tr('Assunto (em branco: "Re:" + assunto padrão)')}
+                  aria-label={tr('Assunto do {titulo}', { titulo })}
+                />
+                <textarea
+                  id={`remetente-follow-up-${i}`}
+                  className="input textarea"
+                  rows={4}
+                  value={form.followUps[i].corpo}
+                  onChange={(e) => mudarFollowUp(i, 'corpo', e.target.value)}
+                  placeholder={tr('Olá, {contato}! Conseguiu ver meu e-mail anterior?')}
+                />
+              </div>
+            ))}
+          </fieldset>
 
           {editando && (
             <button

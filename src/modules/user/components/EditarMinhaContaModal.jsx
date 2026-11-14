@@ -10,6 +10,7 @@ export default function EditarMinhaContaModal({ perfil, ehAdmin, erro, onSave, o
     email: perfil.email,
     telefone: perfil.telefone ?? '',
     nomeEmpresa: perfil.nomeEmpresa ?? '',
+    telegramChatId: perfil.telegramChatId ?? '',
   });
 
   function handleChangeEdicao(field, value) {
@@ -22,7 +23,10 @@ export default function EditarMinhaContaModal({ perfil, ehAdmin, erro, onSave, o
       email: formEdicao.email,
       telefone: formEdicao.telefone,
     };
-    if (ehAdmin) dados.nomeEmpresa = formEdicao.nomeEmpresa;
+    if (ehAdmin) {
+      dados.nomeEmpresa = formEdicao.nomeEmpresa;
+      dados.telegramChatId = formEdicao.telegramChatId.trim();
+    }
     return dados;
   }
 
@@ -81,6 +85,22 @@ export default function EditarMinhaContaModal({ perfil, ehAdmin, erro, onSave, o
                   onChange={(e) => handleChangeEdicao('nomeEmpresa', e.target.value)}
                   required
                 />
+              </div>
+
+              <div className="field">
+                <label className="field__label" htmlFor="minha-conta-telegram">{tr('ID da conversa do Telegram')}</label>
+                <input
+                  id="minha-conta-telegram"
+                  className="input"
+                  type="text"
+                  inputMode="numeric"
+                  value={formEdicao.telegramChatId}
+                  onChange={(e) => handleChangeEdicao('telegramChatId', e.target.value)}
+                  placeholder={tr('Ex.: 123456789')}
+                />
+                <p className="field__hint">
+                  {tr('É para lá que vão o lembrete diário de follow-up e o aviso de lead que respondeu. Em branco, não avisa.')}
+                </p>
               </div>
             </fieldset>
           )}

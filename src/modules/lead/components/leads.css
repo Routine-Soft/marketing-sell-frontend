@@ -1,10 +1,3 @@
-.leads {
-  display: grid;
-  gap: 16px;
-  padding: 16px;
-  min-width: 0;
-}
-
 .leads__filtros {
   display: flex;
   flex-wrap: wrap;
@@ -40,69 +33,6 @@
   animation: slideDown 0.25s var(--ease) backwards;
 }
 
-.leads__skeleton {
-  display: grid;
-  gap: 8px;
-}
-
-.leads__tabela td {
-  vertical-align: top;
-}
-
-.leads__tabela td > a,
-.leads__tabela td > small,
-.leads__tabela td > .badge {
-  display: block;
-  width: fit-content;
-}
-
-.leads__tabela td > * + * {
-  margin-top: 4px;
-}
-
-.leads__tabela small {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-}
-
-.leads__linha {
-  animation: fadeIn 0.3s var(--ease) backwards;
-  animation-delay: calc(var(--i) * 25ms);
-}
-
-.leads__check {
-  width: 36px;
-}
-
-.leads__check input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--primary);
-}
-
-.leads__nome {
-  padding: 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  font-weight: 600;
-  color: var(--text);
-  text-align: left;
-  cursor: pointer;
-}
-
-.leads__nome:hover {
-  color: var(--primary);
-}
-
-.leads__fonte {
-  font-size: 0.7rem;
-}
-
-.leads__td-contato {
-  min-width: 230px;
-}
-
 .leads__email,
 .leads__site {
   max-width: 280px;
@@ -117,26 +47,6 @@
 .leads__lote .btn svg {
   width: 16px;
   height: 16px;
-}
-
-.leads__status {
-  min-width: 130px;
-  padding-block: 6px;
-  font-size: 0.875rem;
-}
-
-.leads__status[data-status='cliente'] {
-  color: var(--success);
-  border-color: var(--success);
-}
-
-.leads__status[data-status='interessado'] {
-  color: var(--primary);
-  border-color: var(--primary);
-}
-
-.leads__status[data-status='descartado'] {
-  color: var(--text-subtle);
 }
 
 .leads__paginacao {
@@ -173,49 +83,90 @@
   grid-column: 1 / -1;
 }
 
-/* Celular: cada lead vira um cartão (sem tabela larga). */
+.leads__avisos {
+  display: grid;
+  gap: 8px;
+}
+
+.leads__avisos .alert,
+.leads__aviso-busca {
+  margin: 0;
+}
+
+/* Planilha de leads: a coluna do nome fica fixa ao rolar para o lado. */
+.leads__tabela {
+  width: max-content;
+  min-width: 100%;
+}
+
+.plan.leads__tabela .leads__col-nome {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  width: 220px;
+  min-width: 220px;
+  box-shadow: 2px 0 0 var(--plan-linha);
+}
+
+.plan.leads__tabela thead .leads__col-nome {
+  z-index: 4;
+}
+
+.plan.leads__tabela .leads__col-nome .plan__input {
+  font-weight: 600;
+}
+
+.leads__tabela .plan__edit {
+  min-width: 140px;
+}
+
+.leads__local,
+.leads__contatos {
+  display: flex;
+  align-items: center;
+}
+
+.leads__local .plan__input:last-child {
+  flex: none;
+  width: 52px;
+  text-transform: uppercase;
+  border-left: 1px solid var(--plan-linha);
+}
+
+.leads__contatos strong {
+  flex: none;
+  width: 34px;
+  text-align: center;
+}
+
+.leads__contatos .plan__input {
+  color: var(--text-muted);
+}
+
+.leads__td-email {
+  max-width: 240px;
+}
+
+.leads__td-email > * {
+  display: block;
+}
+
+.leads__status {
+  font-weight: 600;
+}
+
+.leads__hoje {
+  margin-left: 6px;
+}
+
+.leads__dica {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
 @media (max-width: 640px) {
-  .leads__tabela thead {
-    display: none;
-  }
-
-  .leads__tabela,
-  .leads__tabela tbody {
-    display: block;
-    min-width: 0;
-  }
-
-  .leads__tabela td.leads__td-acoes {
-    text-align: right;
-  }
-
-  .leads__tabela tr.leads__linha {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    grid-template-areas:
-      'check empresa acoes'
-      'check contato contato'
-      'check local situacao';
-    gap: 8px 10px;
-    padding: 14px 4px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .leads__tabela tr.leads__linha td {
-    padding: 0;
-    border: 0;
-    min-width: 0;
-  }
-
-  .leads__tabela td.leads__check { grid-area: check; }
-  .leads__tabela td.leads__td-empresa { grid-area: empresa; }
-  .leads__tabela td.leads__td-contato { grid-area: contato; }
-  .leads__tabela td.leads__td-local { grid-area: local; align-self: center; color: var(--text-muted); font-size: 0.875rem; }
-  .leads__tabela td.leads__td-situacao { grid-area: situacao; }
-  .leads__tabela td.leads__td-acoes { grid-area: acoes; }
-
-  .leads__email,
-  .leads__site {
-    max-width: none;
+  .plan.leads__tabela .leads__col-nome {
+    width: 150px;
+    min-width: 150px;
   }
 }

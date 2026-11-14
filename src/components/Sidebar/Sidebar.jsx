@@ -8,6 +8,7 @@ import { iniciais } from '@/utils/nome'
 import Marca from './Marca'
 import BotaoInstalar from './BotaoInstalar'
 import { ICONES } from './menuIcones'
+import { ABAS } from './abas'
 import './Sidebar.css'
 import { tr } from '@/i18n';
 
@@ -15,23 +16,20 @@ const TODOS = ['super_admin', 'admin', 'membro']
 
 const GRUPOS = [
     {
-        titulo: tr('Principal'),
-        itens: [
-            { label: tr('Página inicial'), path: '/home', icone: 'inicio', roles: TODOS },
-            { label: tr('Captação'), path: '/captacao', icone: 'captacao', roles: TODOS },
-            { label: tr('Leads'), path: '/leads', icone: 'leads', roles: TODOS },
-        ],
+        titulo: tr('Planilha'),
+        itens: ABAS.map((aba) => ({ ...aba, roles: TODOS })),
     },
     {
-        titulo: tr('Super Admin'),
+        titulo: tr('Ferramentas'),
         itens: [
-            { label: tr('Contas'), path: '/contas', icone: 'empresas', roles: ['super_admin'] },
+            { label: tr('Buscar leads'), path: '/captacao', icone: 'captacao', roles: TODOS },
+            { label: tr('Remetentes de e-mail'), path: '/remetentes', icone: 'email', roles: ['admin', 'super_admin'] },
         ],
     },
     {
         titulo: tr('Conta'),
         itens: [
-            { label: tr('Remetentes'), path: '/remetentes', icone: 'email', roles: ['admin', 'super_admin'] },
+            { label: tr('Contas'), path: '/contas', icone: 'empresas', roles: ['super_admin'] },
             { label: tr('Minha conta'), path: '/minha-conta', icone: 'usuarios', roles: TODOS },
         ],
     },
@@ -67,7 +65,9 @@ export function Sidebar({ aberto = false, onFechar }) {
                             {grupo.itens.map((item) => (
                                 <li key={item.path}>
                                     <NavLink to={item.path} className="sidebar__link" onClick={onFechar}>
-                                        <Icone>{ICONES[item.icone]}</Icone>
+                                        {item.cor
+                                            ? <span className="sidebar__cor" style={{ background: item.cor }} aria-hidden="true" />
+                                            : <Icone>{ICONES[item.icone]}</Icone>}
                                         <span>{item.label}</span>
                                     </NavLink>
                                 </li>

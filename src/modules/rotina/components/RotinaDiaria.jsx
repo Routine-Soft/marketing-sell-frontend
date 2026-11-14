@@ -1,0 +1,144 @@
+import { Fragment, useEffect, useRef, useState } from 'react'
+import { IconeSetaDir, IconeSetaEsq } from '@/components/CrudCard/icones'
+import { useAuthContext } from '@/hooks/useAuthContext'
+import { useGradeDaRotina } from '../rotina.hooks'
+import { BLOCOS, corDoPercentual, diaCurto, diaDaSemanaCurto, diaPorExtenso, estadoDaCelula, frequenciaDe, hojeEmBrasilia, segundaDe, somarDias } from '../rotina.utils'
+import { tr } from '@/i18n'
+import './rotina.css'
+
+// Linhas agrupadas por bloco, na ordem em que chegam.
+function agrupar(linhas) {
+  const blocos = []
+  linhas.forEach((linha) => {
+    if (blocos.at(-1)?.id === linha.bloco) blocos.at(-1).linhas.push(linha)
+    else blocos.push({ id: linha.bloco, linhas: [linha] })
+  })
+  return blocos
+}
+
+function tituloDaLinha(linha) {
+  if (linha.tipo === 'tarefa') return `${linha.numero}. ${tr(linha.titulo)}`
+  return `↳ ${tr(linha.titulo)}${linha.tipo === 'automatico' ? ` (${tr('automático')})` : ''}`
+}
+
+function Celula({ linha, dia, hoje, inicio, onMarcar }) {
+  const estado = estadoDaCelula(linha, dia, hoje, inicio)
+  const ehHoje = dia.dia === hoje
+  if (estado === 'inativo') return <td className="rotina__cel" data-estado="inativo" data-hoje={ehHoje} aria-label={tr('Não precisa nesse dia')} />
+  if (linha.tipo === 'automatico') {
+    return <td className="rotina__cel rotina__cel--numero" data-estado={estado} data-hoje={ehHoje}>{dia.contagens[linha.contagem]}</td>
+  }
+  const feita = dia.feitas.includes(linha.id)
+  return (
+    <td className="rotina__cel" data-estado={estado} data-hoje={ehHoje}>
+      <input type="checkbox" className="plan__caixa" checked={feita} disabled={!!linha.auto}
+        title={linha.auto ? tr('Marcada sozinha pelo sistema') : undefined}
+        onChange={(e) => onMarcar(dia, linha.id, e.target.checked)}
+        aria-label={`${tr(linha.titulo)} · ${diaPorExtenso(dia.dia)}`} />
+    </td>
+  )
+}
+
+export default function RotinaDiaria() {
+  const { user } = useAuthContext()
+  const hoje = hojeEmBrasilia()
+  const [de, setDe] = useState(() => segundaDe(hoje))
+  const { grade, erro, marcar } = useGradeDaRotina(de)
+  const colunaDeHoje = useRef(null)
+  const naSemanaAtual = de === segundaDe(hoje)
+
+  // Ao abrir cada período, a grade rola até a coluna de hoje (no celular ela pode estar fora da tela).
+  const periodo = grade?.de
+  useEffect(() => {
+    const coluna = colunaDeHoje.current
+    const moldura = coluna?.closest('.plan-wrap')
+    if (!periodo || !moldura) return
+    // Só rola se hoje não couber na tela; aí hoje fica logo depois das colunas fixas.
+    const hojeNaTela = coluna.getBoundingClientRect()
+    const fixo = moldura.querySelector('thead .rotina__tarefa').getBoundingClientRect()
+    if (hojeNaTela.right > moldura.getBoundingClientRect().right) moldura.scrollLeft += hojeNaTela.left - fixo.right
+  }, [periodo])
+
+  return (
+    <div className="page page--planilha">
+      <header className="plan-titulo">
+        <div>
+          <h2>{tr('Rotina diária')}{user?.nomeEmpresa ? ` — ${user.nomeEmpresa}` : ''}</h2>
+          <p>{tr('Marque a caixinha quando fizer. Cinza = não precisa nesse dia. Linhas "Opcional" = canais que você usou (não contam no %). Dia ruim? Faça o mínimo: 10 contatos + 3 follow-ups.')}</p>
+        </div>
+        <div className="plan-titulo__acoes">
+          <button type="button" className="icon-btn" aria-label={tr('Semana anterior')} title={tr('Semana anterior')} onClick={() => setDe(somarDias(de, -7))}>
+            <IconeSetaEsq />
+          </button>
+          <button type="button" className="btn btn--sm" disabled={naSemanaAtual} onClick={() => setDe(segundaDe(hoje))}>{tr('Hoje')}</button>
+          <button type="button" className="icon-btn" aria-label={tr('Próxima semana')} title={tr('Próxima semana')} onClick={() => setDe(somarDias(de, 7))}>
+            <IconeSetaDir />
+          </button>
+        </div>
+      </header>
+
+      {erro && <p className="alert alert--error" role="alert">{erro.message}</p>}
+
+      {!grade ? (
+        <div className="plan-wrap plan-carregando" aria-busy="true" aria-label={tr('Carregando')}>
+          {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => <div key={i} className="skeleton skeleton--line" style={{ height: 30 }} />)}
+        </div>
+      ) : (
+        <div className="plan-wrap">
+          <table className="plan rotina">
+            <thead>
+              <tr>
+                <th rowSpan={2} className="rotina__bloco">{tr('Bloco')}</th>
+                <th rowSpan={2} className="rotina__tarefa">{tr('Tarefa')}</th>
+                <th rowSpan={2} className="rotina__meta">{tr('Meta')}</th>
+                <th rowSpan={2} className="rotina__freq">{tr('Frequência')}</th>
+                {grade.dias.map((dia) => (
+                  <th key={dia.dia} className="rotina__dia" data-hoje={dia.dia === grade.hoje} ref={dia.dia === grade.hoje ? colunaDeHoje : undefined}>
+                    {diaCurto(dia.dia)}
+                  </th>
+                ))}
+              </tr>
+              <tr>
+                {grade.dias.map((dia) => (
+                  <th key={dia.dia} className="rotina__dia rotina__dia--semana" data-hoje={dia.dia === grade.hoje}>{diaDaSemanaCurto(dia.dia)}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {agrupar(grade.linhas).map((bloco) => (
+                <Fragment key={bloco.id}>
+                  <tr className="rotina__bloco-linha" style={{ '--bloco-cor': BLOCOS[bloco.id].cor }}>
+                    <th colSpan={3 + grade.dias.length}><span>{BLOCOS[bloco.id].nome}</span></th>
+                  </tr>
+                  {bloco.linhas.map((linha, i) => (
+                    <tr key={linha.id} className={`rotina__linha rotina__linha--${linha.tipo}`} style={{ '--bloco-cor': BLOCOS[bloco.id].cor }}>
+                      {i === 0 && <th rowSpan={bloco.linhas.length} scope="rowgroup" className="rotina__bloco">{BLOCOS[bloco.id].nome}</th>}
+                      <th scope="row" className="rotina__tarefa">
+                        {tituloDaLinha(linha)}
+                        {linha.meta ? <small className="rotina__meta-celular">{tr('Meta: {n}', { n: linha.meta })}</small> : null}
+                      </th>
+                      <td className="rotina__meta">{linha.meta ?? ''}</td>
+                      <td className="rotina__freq">{frequenciaDe(linha)}</td>
+                      {grade.dias.map((dia) => <Celula key={dia.dia} linha={linha} dia={dia} hoje={grade.hoje} inicio={grade.inicio} onMarcar={marcar} />)}
+                    </tr>
+                  ))}
+                </Fragment>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr className="rotina__total">
+                <th className="rotina__bloco" />
+                <th scope="row" className="rotina__tarefa">{tr('% do dia concluído')}</th>
+                <td className="rotina__meta" />
+                <td className="rotina__freq" />
+                {grade.dias.map((dia) => (
+                  <td key={dia.dia} className="rotina__cel rotina__cel--numero" style={{ background: corDoPercentual(dia.percentual) }}>{dia.percentual}%</td>
+                ))}
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      )}
+    </div>
+  )
+}

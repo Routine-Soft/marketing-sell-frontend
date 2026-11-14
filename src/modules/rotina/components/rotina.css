@@ -1,0 +1,207 @@
+/* Grade da rotina: tarefas nas linhas, dias nas colunas (como a aba "Rotina diária" da planilha). */
+.rotina {
+  --larg-bloco: 124px;
+  --larg-tarefa: 330px;
+  width: max-content;
+  min-width: 100%;
+}
+
+.plan.rotina th {
+  font-weight: 500;
+}
+
+/* Colunas fixas à esquerda. */
+.plan.rotina .rotina__bloco,
+.plan.rotina .rotina__tarefa {
+  position: sticky;
+  z-index: 2;
+}
+
+.plan.rotina thead .rotina__bloco,
+.plan.rotina thead .rotina__tarefa {
+  z-index: 4;
+}
+
+.plan.rotina .rotina__bloco {
+  left: 0;
+  width: var(--larg-bloco);
+  min-width: var(--larg-bloco);
+  max-width: var(--larg-bloco);
+}
+
+.plan.rotina .rotina__tarefa {
+  left: var(--larg-bloco);
+  width: var(--larg-tarefa);
+  min-width: var(--larg-tarefa);
+  max-width: var(--larg-tarefa);
+  box-shadow: 2px 0 0 var(--plan-linha);
+}
+
+.plan.rotina tbody .rotina__bloco {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--bloco-cor);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: top;
+  background: color-mix(in srgb, var(--bloco-cor) 14%, var(--plan-fundo));
+  border-bottom: 2px solid var(--bloco-cor);
+}
+
+.plan.rotina tbody tr:has(+ .rotina__bloco-linha) > *,
+.plan.rotina tbody tr:last-child > * {
+  border-bottom: 2px solid color-mix(in srgb, var(--bloco-cor) 55%, var(--plan-linha));
+}
+
+.plan.rotina tbody .rotina__tarefa {
+  font-weight: 600;
+}
+
+.rotina__linha--opcional .rotina__tarefa,
+.rotina__linha--automatico .rotina__tarefa {
+  padding-left: 22px;
+  font-weight: 400 !important;
+  color: var(--text-muted);
+}
+
+.rotina__linha--automatico .rotina__tarefa {
+  font-style: italic;
+}
+
+.rotina__meta,
+.rotina__freq {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.plan.rotina .rotina__meta {
+  width: 58px;
+  text-align: center;
+}
+
+.plan.rotina thead .rotina__dia {
+  width: 62px;
+  min-width: 62px;
+  height: 28px;
+  padding: 4px 6px;
+  text-align: center;
+  border-bottom: 0;
+}
+
+.plan.rotina thead .rotina__dia--semana {
+  font-size: 0.68rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--plan-linha);
+}
+
+.plan.rotina thead .rotina__dia[data-hoje='true'] {
+  font-weight: 800;
+  color: var(--plan-hoje-texto);
+  background: var(--plan-hoje-bg);
+}
+
+.plan.rotina .rotina__cel {
+  padding: 0;
+  text-align: center;
+}
+
+.plan.rotina .rotina__cel[data-hoje='true'] {
+  box-shadow: inset 2px 0 0 var(--plan-hoje-bg), inset -2px 0 0 var(--plan-hoje-bg);
+}
+
+.rotina__cel--numero {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.rotina__cel .plan__caixa {
+  width: 19px;
+  height: 19px;
+}
+
+.plan.rotina tfoot th,
+.plan.rotina tfoot td {
+  height: 40px;
+  font-weight: 800;
+  border-top: 2px solid var(--plan-linha);
+}
+
+.plan.rotina tfoot .rotina__tarefa {
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.plan.rotina tfoot .rotina__cel {
+  color: light-dark(#1f2937, #fff);
+}
+
+/* No computador o bloco é a primeira coluna; a linha de bloco só aparece no celular. */
+.rotina__bloco-linha,
+.rotina__meta-celular {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .rotina {
+    --larg-tarefa: 158px;
+  }
+
+  .plan.rotina .rotina__bloco,
+  .plan.rotina .rotina__meta,
+  .plan.rotina .rotina__freq {
+    display: none;
+  }
+
+  .plan.rotina .rotina__tarefa {
+    left: 0;
+    padding: 6px 8px;
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+
+  .rotina__linha--opcional .rotina__tarefa,
+  .rotina__linha--automatico .rotina__tarefa {
+    padding-left: 12px;
+  }
+
+  .rotina__bloco-linha {
+    display: table-row;
+  }
+
+  .rotina__bloco-linha span {
+    position: sticky;
+    left: 8px;
+  }
+
+  .plan.rotina .rotina__bloco-linha > th {
+    height: 28px;
+    padding: 4px 8px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    color: var(--bloco-cor);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: color-mix(in srgb, var(--bloco-cor) 16%, var(--plan-fundo));
+  }
+
+  .rotina__meta-celular {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--text-subtle);
+  }
+
+  .plan.rotina thead .rotina__dia {
+    width: 54px;
+    min-width: 54px;
+  }
+
+  .plan.rotina .rotina__cel {
+    height: 42px;
+  }
+
+  .rotina__cel .plan__caixa {
+    width: 22px;
+    height: 22px;
+  }
+}

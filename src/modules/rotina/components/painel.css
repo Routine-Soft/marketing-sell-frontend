@@ -1,0 +1,36 @@
+.painel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.painel__coluna {
+  display: grid;
+  gap: 16px;
+}
+
+.plan.painel__tabela {
+  width: 100%;
+}
+
+.plan.painel__tabela thead th {
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.plan.painel__tabela tbody th {
+  font-weight: 500;
+}
+
+.plan.painel__tabela .painel__valor {
+  width: 96px;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.painel__leitura {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}

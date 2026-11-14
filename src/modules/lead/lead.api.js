@@ -7,3 +7,5 @@ export const atualizarLead = (id, dados) => httpClient.patch(`/leads/${id}`, dad
 export const excluirLead = (id) => httpClient.delete(`/leads/${id}`)
 export const excluirLeads = (ids) => httpClient.post('/leads/excluir', { ids })
 export const procurarEmails = (ids) => httpClient.post('/leads/emails', { ids })
+export const registrarContato = (id, canal) => httpClient.post(`/leads/${id}/contatos`, { canal })
+export const criarLead = (dados) => httpClient.post('/leads', dados)

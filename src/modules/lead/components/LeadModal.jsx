@@ -42,6 +42,12 @@ export default function LeadModal({ lead, erro, onSalvar, onClose }) {
             {lead.ultimoEnvioEm && (
               <div><dt>{tr('Último e-mail')}</dt><dd>{formatarData(lead.ultimoEnvioEm)} · {lead.ultimoEnvioNegocio}</dd></div>
             )}
+            {lead.numeroContatos > 0 && (
+              <div><dt>{tr('Contatos feitos')}</dt><dd>{lead.numeroContatos} · {tr('último em {data}', { data: formatarData(lead.ultimoContatoEm) })}</dd></div>
+            )}
+            {lead.proximoFollowUpEm && (
+              <div><dt>{tr('Próximo follow-up')}</dt><dd>{formatarData(lead.proximoFollowUpEm)}</dd></div>
+            )}
             {lead.envioErro && (
               <div className="lead-detalhes__largo"><dt>{tr('Falha no último envio')}</dt><dd>{tr(lead.envioErro)}</dd></div>
             )}

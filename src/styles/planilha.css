@@ -1,0 +1,313 @@
+/* Visual de planilha: grade com linhas finas, cabeçalho na cor da aba, células coloridas pelo estado. */
+:root {
+  --plan-linha: light-dark(#d9dee7, #334155);
+  --plan-fundo: var(--surface);
+  --plan-banda: light-dark(#f4f7fd, #1a2438);
+  --plan-fixo: light-dark(#f8fafc, #1b2537);
+  --plan-feito-bg: light-dark(#b9efc8, #14532d);
+  --plan-feito-texto: light-dark(#0c6b30, #86efac);
+  --plan-falta-bg: light-dark(#ffdcdc, #4a1f24);
+  --plan-falta-texto: light-dark(#b91c1c, #fca5a5);
+  --plan-inativo-bg: light-dark(#d5d6dc, #293244);
+  --plan-hoje-bg: light-dark(#ffd54a, #a16207);
+  --plan-hoje-texto: light-dark(#3b2600, #fff7d6);
+  --plan-aviso-bg: light-dark(#ffe3b8, #553912);
+  --plan-destaque-bg: light-dark(#e3d7ff, #3b2f66);
+  --plan-info-bg: light-dark(#d6e8ff, #1e3a5f);
+  --plan-grad-0: light-dark(#f58a93, #9f2f3a);
+  --plan-grad-1: light-dark(#ffd166, #a16207);
+  --plan-grad-2: light-dark(#6fd99b, #15803d);
+
+  --aba-rotina: #19a568;
+  --aba-painel: #7646d8;
+  --aba-leads: #2a7de1;
+  --aba-parceiros: #e08a12;
+  --aba-preparacao: #d9447f;
+  --aba-comunidades: #1fa5b3;
+  --aba-anuncios: #7c8594;
+  --aba-cor: var(--primary);
+}
+
+.page--planilha {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  padding: clamp(12px, 2vw, 24px);
+}
+
+/* Faixa de título, como a primeira linha da planilha. */
+.plan-titulo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--aba-cor), color-mix(in srgb, var(--aba-cor) 72%, #1e1b4b));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.plan-titulo h2 {
+  margin: 0;
+  font-size: clamp(1rem, 2.4vw, 1.2rem);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.plan-titulo p {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  opacity: 0.92;
+}
+
+.plan-titulo__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.plan-titulo .btn,
+.plan-titulo .icon-btn {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: none;
+}
+
+.plan-titulo .btn:hover:not(:disabled),
+.plan-titulo .icon-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.plan-titulo .btn--primary {
+  color: var(--aba-cor);
+  background: #fff;
+}
+
+.plan-titulo .btn--primary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.88);
+}
+
+/* Moldura da grade: a rolagem de cima para baixo é só a da página; a grade só rola para o lado
+   quando não cabe na tela (a página nunca rola para o lado). */
+.plan-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--plan-fundo);
+  border: 1px solid var(--plan-linha);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.plan {
+  width: max-content;
+  min-width: 100%;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  border-spacing: 0;
+  border-collapse: separate;
+}
+
+.plan th,
+.plan td {
+  height: 36px;
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: middle;
+  background: var(--plan-fundo);
+  border-right: 1px solid var(--plan-linha);
+  border-bottom: 1px solid var(--plan-linha);
+}
+
+.plan thead th {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  background: var(--aba-cor);
+  border-color: color-mix(in srgb, var(--aba-cor) 70%, #fff);
+}
+
+.plan--bandas :where(tbody tr:nth-child(even)) > td {
+  background: var(--plan-banda);
+}
+
+.plan .plan__num {
+  width: 38px;
+  min-width: 38px;
+  padding: 0 4px;
+  font-size: 0.72rem;
+  color: var(--text-subtle);
+  text-align: center;
+  background: var(--plan-fixo);
+}
+
+.plan .plan__centro {
+  text-align: center;
+}
+
+.plan .plan__numero {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.plan .plan__secao > th,
+.plan .plan__secao > td {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--aba-cor);
+}
+
+/* Estados das células (as mesmas cores da formatação condicional da planilha). */
+.plan td[data-estado='feito'],
+.plan tr[data-estado='feito'] > td {
+  color: var(--plan-feito-texto);
+  background: var(--plan-feito-bg);
+}
+
+.plan td[data-estado='falta'],
+.plan tr[data-estado='falta'] > td {
+  color: var(--plan-falta-texto);
+  background: var(--plan-falta-bg);
+}
+
+.plan td[data-estado='inativo'],
+.plan tr[data-estado='inativo'] > td {
+  background: var(--plan-inativo-bg);
+}
+
+.plan td[data-estado='aviso'],
+.plan tr[data-estado='aviso'] > td {
+  font-weight: 600;
+  background: var(--plan-aviso-bg);
+}
+
+.plan td[data-estado='destaque'] {
+  font-weight: 600;
+  background: var(--plan-destaque-bg);
+}
+
+.plan td[data-estado='info'] {
+  background: var(--plan-info-bg);
+}
+
+.plan tr[data-riscado='true'] > td {
+  text-decoration: line-through;
+}
+
+/* Campos dentro da célula: sem borda, como digitar direto na planilha. */
+.plan td.plan__edit {
+  padding: 0;
+}
+
+.plan__input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 35px;
+  padding: 6px 10px;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+}
+
+select.plan__input {
+  padding-right: 4px;
+  cursor: pointer;
+}
+
+/* Data vazia não mostra "dd/mm/aaaa" em toda linha: só aparece ao tocar no campo. */
+.plan__input[type='date'][data-vazio='true']:not(:focus) {
+  color: transparent;
+}
+
+.plan__input::placeholder {
+  color: var(--text-subtle);
+}
+
+.plan__input:focus-visible {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 2px var(--aba-cor);
+}
+
+.plan__caixa {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  vertical-align: middle;
+  cursor: pointer;
+  accent-color: var(--plan-feito-texto);
+}
+
+.plan__caixa:disabled {
+  cursor: default;
+}
+
+.plan__com-link {
+  display: flex;
+  align-items: center;
+}
+
+.plan__com-link a {
+  flex: none;
+  padding: 0 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--aba-cor);
+}
+
+.plan__nova > td {
+  background: var(--plan-fixo);
+}
+
+.plan__acoes {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.plan__acoes .icon-btn {
+  width: 28px;
+  height: 28px;
+}
+
+.plan-vazio,
+.plan-carregando {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+}
+
+.plan-rodape {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  .page--planilha {
+    padding: 10px 10px 16px;
+  }
+
+  .plan-titulo {
+    padding: 12px 16px;
+  }
+
+  /* Evita o zoom do iPhone ao tocar no campo. */
+  .plan__input {
+    font-size: 16px;
+  }
+}

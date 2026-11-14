@@ -1,0 +1,17 @@
+import { localeAtual } from '@/i18n'
+
+// Data do servidor → 'AAAA-MM-DD' no dia de Brasília (o valor do campo de data).
+export function diaDaData(valor) {
+    if (!valor) return ''
+    return new Date(new Date(valor).getTime() - 3 * 60 * 60 * 1000).toISOString().slice(0, 10)
+}
+
+// "13/11/2026", sem depender do fuso do aparelho.
+export function dataCurta(valor) {
+    const dia = diaDaData(valor)
+    return dia ? new Date(`${dia}T12:00:00Z`).toLocaleDateString(localeAtual(), { timeZone: 'UTC' }) : ''
+}
+
+export function comProtocolo(link) {
+    return /^https?:\/\//i.test(link) ? link : `https://${link}`
+}
