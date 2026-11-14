@@ -63,7 +63,7 @@ export const ROTULO_EXTRA = {
     cnae: 'CNAE',
 }
 
-export const FILTROS_VAZIOS = { busca: '', fonte: '', status: '', estado: '', comEmail: '', comTelefone: '', buscaId: '', followUp: '' }
+export const FILTROS_VAZIOS = { busca: '', fonte: '', status: '', estado: '', comEmail: '', comTelefone: '', buscaId: '', followUp: '', ordem: '' }
 
 export function montarQuery(filtros, pagina, porPagina) {
     const params = new URLSearchParams()

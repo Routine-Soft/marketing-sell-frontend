@@ -642,4 +642,9 @@ export default {
   'Banco de ideias ({n})': 'Banco de ideas ({n})',
   'Carregando dias anteriores...': 'Cargando días anteriores...',
   'Carregando mais dias...': 'Cargando más días...',
+
+  // Negócios, modelos e rotina editável
+  'Ordem': 'Orden',
+  'Mais recentes primeiro': 'Más recientes primero',
+  'Mais antigos primeiro': 'Más antiguos primero',
 }

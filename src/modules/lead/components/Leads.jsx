@@ -102,7 +102,8 @@ export default function Leads() {
   const todosDaLista = todosMarcados && todosDe === chaveDosFiltros && total > itens.length
   const quantosEscolhidos = todosDaLista ? total : escolhidos.length
   const totalPaginas = Math.max(1, Math.ceil(total / porPagina))
-  const temFiltro = Object.values(filtros).some(Boolean)
+  // A ordem não é filtro: não muda quais leads aparecem.
+  const temFiltro = Object.entries(filtros).some(([campo, valor]) => campo !== 'ordem' && valor)
 
   function alternar(id) {
     setSelecionados((atual) => {
@@ -168,6 +169,10 @@ export default function Leads() {
           <input className="input" type="search" value={texto} onChange={(e) => setTexto(e.target.value)}
             placeholder={tr('Nome, telefone, e-mail, cidade...')} aria-label={tr('Buscar leads')} />
         </label>
+        <select className="input" value={filtros.ordem} onChange={(e) => mudarFiltro('ordem', e.target.value)} aria-label={tr('Ordem')}>
+          <option value="">{tr('Mais recentes primeiro')}</option>
+          <option value="antigos">{tr('Mais antigos primeiro')}</option>
+        </select>
         <select className="input" value={filtros.status} onChange={(e) => mudarFiltro('status', e.target.value)} aria-label={tr('Status')}>
           <option value="">{tr('Todos os status')}</option>
           {STATUS.map((s) => <option key={s.valor} value={s.valor}>{s.rotulo}</option>)}
