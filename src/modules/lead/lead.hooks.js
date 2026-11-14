@@ -64,6 +64,7 @@ export function useLeads(filtros, pagina) {
         erro,
         sucesso,
         exportando,
+        limparAvisos: () => { setErro(null); setSucesso(null) },
         criar: (dados) => executar(() => criarLead(dados), recarregar),
         salvar: (id, campos) => executar(() => atualizarLead(id, campos), (r) => trocarLead(r.data)),
         registrarContato: (id, canal) => executar(() => registrarContato(id, canal), (r) => trocarLead(r.data)),

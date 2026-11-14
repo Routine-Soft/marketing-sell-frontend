@@ -15,3 +15,11 @@ export function dataCurta(valor) {
 export function comProtocolo(link) {
     return /^https?:\/\//i.test(link) ? link : `https://${link}`
 }
+
+export function semProtocolo(link) {
+    return link.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '')
+}
+
+export function textoDaOpcao(opcoes, valor) {
+    return opcoes.find((opcao) => opcao.valor === valor)?.rotulo ?? ''
+}

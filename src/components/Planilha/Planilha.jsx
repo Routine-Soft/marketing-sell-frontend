@@ -1,74 +1,92 @@
-import { useState } from 'react'
 import ConfirmarNoLugar from '@/components/ConfirmarNoLugar/ConfirmarNoLugar'
-import { CelulaCheck, CelulaData, CelulaLink, CelulaSelecao, CelulaTexto } from './Celulas'
-import { dataCurta } from './planilha.utils'
+import { IconeLapis } from '@/components/CrudCard/icones'
+import { comProtocolo, dataCurta, semProtocolo, textoDaOpcao } from './planilha.utils'
 import { tr } from '@/i18n'
 
-const CELULAS = { texto: CelulaTexto, data: CelulaData, selecao: CelulaSelecao, check: CelulaCheck, link: CelulaLink }
-
-function Celula({ coluna, linha, onSalvar }) {
+// Conteúdo de uma célula. Só caixinha e lista "rápida" mudam direto na grade; o resto se muda no modal.
+function Celula({ coluna, linha, onSalvar, onAbrir }) {
   const valor = linha[coluna.campo]
   const estado = coluna.estado?.(linha) ?? ''
-  if (coluna.tipo === 'leitura') {
-    return <td data-estado={estado} className="nowrap">{coluna.ler ? coluna.ler(linha) : dataCurta(valor)}</td>
+  const salvar = (novo) => onSalvar(linha._id, { [coluna.campo]: novo })
+  const rotulo = `${coluna.rotulo} · ${linha[coluna.principal] ?? ''}`
+
+  if (coluna.tipo === 'check') {
+    return (
+      <td className="plan__centro" data-estado={estado}>
+        <input type="checkbox" className="plan__caixa" checked={!!valor} aria-label={rotulo} onChange={(e) => salvar(e.target.checked)} />
+      </td>
+    )
   }
-  const Campo = CELULAS[coluna.tipo ?? 'texto']
+  if (coluna.tipo === 'selecao' && coluna.rapido) {
+    return (
+      <td className="plan__edit" data-estado={estado}>
+        <select className="plan__input plan__rapido" value={valor ?? ''} aria-label={rotulo} onChange={(e) => salvar(e.target.value)}>
+          {coluna.vazio !== undefined && <option value="">{coluna.vazio}</option>}
+          {coluna.opcoes.map((opcao) => <option key={opcao.valor} value={opcao.valor}>{opcao.rotulo}</option>)}
+        </select>
+      </td>
+    )
+  }
+
+  let conteudo = valor
+  if (coluna.ler) conteudo = coluna.ler(linha)
+  else if (coluna.tipo === 'data' || coluna.tipo === 'leitura') conteudo = dataCurta(valor)
+  else if (coluna.tipo === 'selecao') conteudo = textoDaOpcao(coluna.opcoes, valor)
+  else if (coluna.tipo === 'link' && valor) {
+    conteudo = <a className="link" href={comProtocolo(valor)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>{semProtocolo(valor)}</a>
+  }
+  const linhaDeBaixo = coluna.sub?.(linha)
   return (
-    <td className={coluna.tipo === 'check' ? 'plan__centro' : 'plan__edit'} data-estado={estado}>
-      <Campo valor={valor} rotulo={coluna.rotulo} opcoes={coluna.opcoes} vazio={coluna.vazio}
-        onSalvar={(novo) => onSalvar(linha._id, { [coluna.campo]: novo })} />
+    <td className={`plan__texto${coluna.destaque ? ' plan__principal' : ''}`} data-estado={estado} onClick={onAbrir}>
+      {conteudo}
+      {linhaDeBaixo && <small className="plan__sub">{linhaDeBaixo}</small>}
     </td>
   )
 }
 
-// Tabela editável com cara de planilha. colunas = [{ campo, rotulo, tipo, largura, opcoes, estado }];
-// a última linha é sempre a "linha nova": digitar no campo principal e sair cria o registro.
-export default function Planilha({ colunas, linhas, campoNovo, textoNovo, onCriar, onSalvar, onExcluir, estadoDaLinha, riscada }) {
-  const [criando, setCriando] = useState(false)
-  // Depois de criar, o campo da linha nova nasce de novo, vazio.
-  const [versaoDoNovo, setVersaoDoNovo] = useState(0)
-
-  async function criar(texto) {
-    if (!texto) return
-    setCriando(true)
-    const criou = await onCriar({ [campoNovo]: texto })
-    setCriando(false)
-    if (criou) setVersaoDoNovo((v) => v + 1)
-  }
-
+// Tabela com cara de planilha, do tamanho da tela (o texto quebra linha em vez de sumir).
+// colunas = [{ campo, rotulo, tipo, opcoes, peso, rapido, ler, sub, estado, soFormulario }]; tocar numa linha abre
+// o modal de edição. Coluna com soFormulario só aparece no modal (o valor dela vai no "sub" de outra coluna).
+export default function Planilha({ colunas: todas, linhas, principal, onEditar, onSalvar, onExcluir, estadoDaLinha, riscada, vazio }) {
+  const colunas = todas.filter((coluna) => !coluna.soFormulario)
   return (
     <div className="plan-wrap">
-      <table className="plan plan--bandas">
+      <table className="plan plan--bandas plan--ajustada">
         <colgroup>
-          <col />
-          {colunas.map((coluna) => <col key={coluna.campo} style={{ minWidth: coluna.largura, width: coluna.largura }} />)}
-          <col />
+          <col className="plan__col-num" />
+          {colunas.map((coluna) => <col key={coluna.campo} style={{ width: `${coluna.peso ?? 10}%` }} />)}
+          <col className="plan__col-acoes" />
         </colgroup>
         <thead>
           <tr>
             <th className="plan__num" aria-label={tr('Linha')} />
-            {colunas.map((coluna) => <th key={coluna.campo} style={{ minWidth: coluna.largura }}>{coluna.rotulo}</th>)}
-            <th aria-label={tr('Ações')} />
+            {colunas.map((coluna) => <th key={coluna.campo}>{coluna.rotulo}</th>)}
+            <th className="plan__acoes" aria-label={tr('Ações')} />
           </tr>
         </thead>
         <tbody>
+          {linhas.length === 0 && (
+            <tr>
+              <td className="plan__num" />
+              <td colSpan={colunas.length + 1} className="plan-dica">{vazio}</td>
+            </tr>
+          )}
           {linhas.map((linha, i) => (
-            <tr key={linha._id} data-estado={estadoDaLinha?.(linha) ?? ''} data-riscado={riscada?.(linha) ?? false}>
+            <tr key={linha._id} className="plan__linha" data-estado={estadoDaLinha?.(linha) ?? ''} data-riscado={riscada?.(linha) ?? false}>
               <td className="plan__num">{i + 1}</td>
-              {colunas.map((coluna) => <Celula key={coluna.campo} coluna={coluna} linha={linha} onSalvar={onSalvar} />)}
-              <td className="plan__acoes"><ConfirmarNoLugar onConfirmar={() => onExcluir(linha._id)} /></td>
+              {colunas.map((coluna) => (
+                <Celula key={coluna.campo} coluna={{ ...coluna, principal }} linha={linha} onSalvar={onSalvar} onAbrir={() => onEditar(linha)} />
+              ))}
+              <td className="plan__acoes">
+                <div className="table__actions">
+                  <button type="button" className="icon-btn" aria-label={tr('Editar {nome}', { nome: linha[principal] })} title={tr('Editar')} onClick={() => onEditar(linha)}>
+                    <IconeLapis />
+                  </button>
+                  <ConfirmarNoLugar onConfirmar={() => onExcluir(linha._id)} />
+                </div>
+              </td>
             </tr>
           ))}
-          <tr className="plan__nova">
-            <td className="plan__num">+</td>
-            {colunas.map((coluna) => (coluna.campo === campoNovo ? (
-              <td key={coluna.campo} className="plan__edit">
-                <input key={versaoDoNovo} className="plan__input" type="text" placeholder={textoNovo} aria-label={textoNovo} disabled={criando}
-                  onBlur={(e) => criar(e.target.value.trim())} onKeyDown={(e) => { if (e.key === 'Enter') e.target.blur() }} />
-              </td>
-            ) : <td key={coluna.campo} />))}
-            <td />
-          </tr>
         </tbody>
       </table>
     </div>

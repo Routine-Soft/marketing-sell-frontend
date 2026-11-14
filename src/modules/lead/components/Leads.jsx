@@ -4,11 +4,10 @@ import LeadModal from './LeadModal'
 import EnviarEmailModal from '@/modules/envio/components/EnviarEmailModal'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import ConfirmarNoLugar from '@/components/ConfirmarNoLugar/ConfirmarNoLugar'
-import { Icone, IconeBusca, IconeLapis, IconeSetaDir, IconeSetaEsq, IconeX } from '@/components/CrudCard/icones'
+import { Icone, IconeBusca, IconeLapis, IconeMais, IconeSetaDir, IconeSetaEsq, IconeX } from '@/components/CrudCard/icones'
 import { ICONES } from '@/components/Sidebar/menuIcones'
 import { useLeads } from '../lead.hooks'
 import { CANAIS_CONTATO, FILTROS_VAZIOS, ROTULO_EMAIL, ROTULO_FONTE, STATUS, emBuscaDeEmail, situacaoDoFollowUp } from '../lead.utils'
-import { CelulaTexto } from '@/components/Planilha/Celulas'
 import { dataCurta } from '@/components/Planilha/planilha.utils'
 import { formatarData } from '@/modules/captacao/captacao.utils'
 import { localeAtual, tr } from '@/i18n'
@@ -34,6 +33,7 @@ function CelulaEmail({ lead }) {
       </>
     )
   }
+  if (lead.emailStatus === 'nao_buscado') return null
   return (
     <span className={`badge${emBuscaDeEmail(lead) ? ' badge--info badge--live' : ''}`}>{ROTULO_EMAIL[lead.emailStatus] ?? lead.emailStatus}</span>
   )
@@ -60,20 +60,13 @@ export default function Leads() {
   }, [params])
   const pagina = Math.max(1, Number(params.get('pagina')) || 1)
 
-  const { itens, total, porPagina, carregando, erro, sucesso, exportando, criar, salvar, excluir, excluirVarios, procurarEmails, registrarContato, exportar, depoisDoEnvio } = useLeads(filtros, pagina)
+  const { itens, total, porPagina, carregando, erro, sucesso, exportando, limparAvisos, criar, salvar, excluir, excluirVarios, procurarEmails, registrarContato, exportar, depoisDoEnvio } = useLeads(filtros, pagina)
   const { hasRole } = useAuthContext()
   const podeEnviar = hasRole('admin') || hasRole('super_admin')
   const [enviarPara, setEnviarPara] = useState(null)
   const [texto, setTexto] = useState(filtros.busca)
   const [selecionados, setSelecionados] = useState(() => new Set())
   const [aberto, setAberto] = useState(null)
-  // Depois de cadastrar, o campo da linha nova nasce de novo, vazio.
-  const [versaoDoNovo, setVersaoDoNovo] = useState(0)
-
-  async function criarLead(nome) {
-    if (!nome) return
-    if (await criar({ nome })) setVersaoDoNovo((v) => v + 1)
-  }
 
   function mudarFiltro(campo, valor) {
     setParams((atual) => {
@@ -129,22 +122,24 @@ export default function Leads() {
     if (resposta) setSelecionados(new Set())
   }
 
-  const celula = (lead, campo, rotulo, extra = {}) => (
-    <CelulaTexto valor={lead[campo]} rotulo={`${rotulo} · ${lead.nome}`} onSalvar={(valor) => salvar(lead._id, { [campo]: valor })} {...extra} />
-  )
+  function abrir(lead) {
+    limparAvisos()
+    setAberto(lead)
+  }
 
   return (
     <div className="page page--planilha">
       <header className="plan-titulo">
         <div>
           <h2>{tr('Leads')} · {total.toLocaleString(localeAtual())}</h2>
-          <p>{tr('Cadastre na primeira linha ou busque nas fontes. Linha laranja = follow-up para hoje. O próximo follow-up é calculado sozinho (3, 7 e 14 dias).')}</p>
+          <p>{tr('Linha laranja = follow-up para hoje. O próximo follow-up é calculado sozinho (3, 7 e 14 dias). Toque num lead para ver e editar.')}</p>
         </div>
         <div className="plan-titulo__acoes">
           <button type="button" className={`btn btn--sm${exportando ? ' btn--loading' : ''}`} onClick={exportar} disabled={exportando || total === 0}>
             {exportando ? tr('Exportando...') : tr('Exportar planilha')}
           </button>
-          <Link className="btn btn--sm btn--primary" to="/captacao">{tr('Buscar leads')}</Link>
+          <Link className="btn btn--sm" to="/captacao">{tr('Buscar leads')}</Link>
+          <button type="button" className="btn btn--sm btn--primary" onClick={() => abrir('novo')}><IconeMais /> {tr('Adicionar lead')}</button>
         </div>
       </header>
 
@@ -214,91 +209,82 @@ export default function Leads() {
         </div>
       ) : (
         <div className="plan-wrap" aria-busy={carregando}>
-          <table className="plan plan--bandas leads__tabela">
+          <table className="plan plan--bandas plan--ajustada leads__tabela">
+            <colgroup>
+              <col className="plan__col-num" />
+              <col style={{ width: '20%' }} />
+              <col style={{ width: '11%' }} />
+              <col style={{ width: '17%' }} />
+              <col style={{ width: '16%' }} />
+              <col style={{ width: '13%' }} />
+              <col style={{ width: '9%' }} />
+              <col style={{ width: '14%' }} />
+              <col className="leads__col-acoes" />
+            </colgroup>
             <thead>
               <tr>
                 <th className="plan__num">
                   <input type="checkbox" className="plan__caixa" checked={todosMarcados} onChange={alternarTodos} aria-label={tr('Selecionar todos desta página')} />
                 </th>
-                <th>{tr('Data cadastro')}</th>
-                <th className="leads__col-nome">{tr('Nome / Clínica')}</th>
-                <th>{tr('Especialidade')}</th>
+                <th>{tr('Nome / Clínica')}</th>
                 <th>{tr('Cidade / UF')}</th>
-                <th>{tr('Telefone')}</th>
-                <th>{tr('E-mail')}</th>
-                <th>{tr('Instagram')}</th>
-                <th>{tr('Origem')}</th>
-                <th>{tr('Canal do 1º contato')}</th>
-                <th>{tr('Data 1º contato')}</th>
-                <th>{tr('Último contato')}</th>
-                <th>{tr('Nº de contatos')}</th>
+                <th>{tr('Contato')}</th>
+                <th>{tr('Contatos feitos')}</th>
                 <th>{tr('Status')}</th>
-                <th>{tr('Próximo follow-up (auto)')}</th>
+                <th>{tr('Próximo follow-up')}</th>
                 <th>{tr('Observações')}</th>
-                <th aria-label={tr('Ações')} />
+                <th className="plan__acoes" aria-label={tr('Ações')} />
               </tr>
             </thead>
             <tbody>
-              {pagina === 1 && (
-                <tr className="plan__nova">
-                  <td className="plan__num">+</td>
-                  <td />
-                  <td className="plan__edit leads__col-nome">
-                    <input key={versaoDoNovo} className="plan__input" type="text" placeholder={tr('Digite o nome do lead novo')} aria-label={tr('Digite o nome do lead novo')}
-                      onBlur={(e) => criarLead(e.target.value.trim())} onKeyDown={(e) => { if (e.key === 'Enter') e.target.blur() }} />
-                  </td>
-                  <td colSpan={14} className="leads__dica">{tr('Digite o nome e aperte Enter. Depois preencha o resto na própria linha.')}</td>
-                </tr>
-              )}
               {itens.length === 0 && (
                 <tr>
                   <td className="plan__num" />
-                  <td colSpan={16} className="leads__dica">
-                    {temFiltro ? tr('Nenhum lead com esses filtros. Tente outros filtros ou limpe a busca.') : tr('Nenhum lead ainda. Cadastre na linha acima ou busque nas fontes.')}
+                  <td colSpan={8} className="plan-dica">
+                    {temFiltro ? tr('Nenhum lead com esses filtros. Tente outros filtros ou limpe a busca.') : tr('Nenhum lead ainda. Toque em "Adicionar lead" ou busque nas fontes.')}
                   </td>
                 </tr>
               )}
               {itens.map((lead) => (
-                <tr key={lead._id} data-estado={situacaoDoFollowUp(lead) === 'vencido' ? 'aviso' : ''} data-riscado={lead.status === 'descartado'}>
+                <tr key={lead._id} className="plan__linha" data-estado={situacaoDoFollowUp(lead) === 'vencido' ? 'aviso' : ''} data-riscado={lead.status === 'descartado'}>
                   <td className="plan__num">
                     <input type="checkbox" className="plan__caixa" checked={selecionados.has(lead._id)} onChange={() => alternar(lead._id)} aria-label={tr('Selecionar {nome}', { nome: lead.nome })} />
                   </td>
-                  <td className="nowrap">{dataCurta(lead.createdAt)}</td>
-                  <td className="plan__edit leads__col-nome">{celula(lead, 'nome', tr('Nome / Clínica'))}</td>
-                  <td className="plan__edit">{celula(lead, 'categoria', tr('Especialidade'))}</td>
-                  <td className="plan__edit">
-                    <span className="leads__local">
-                      {celula(lead, 'cidade', tr('Cidade'))}
-                      {celula(lead, 'estado', tr('UF'), { maximo: 2, placeholder: tr('UF') })}
-                    </span>
+                  <td className="plan__texto" onClick={() => abrir(lead)}>
+                    <strong className="leads__nome">{lead.nome}</strong>
+                    {lead.categoria && <small>{lead.categoria}</small>}
+                    <small>{[lead.fonte === 'manual' ? lead.origem : (ROTULO_FONTE[lead.fonte] ?? lead.fonte), dataCurta(lead.createdAt)].filter(Boolean).join(' · ')}</small>
                   </td>
-                  <td className="plan__edit">{celula(lead, 'telefone', tr('Telefone'), { tipo: 'tel' })}</td>
-                  <td className="leads__td-email"><CelulaEmail lead={lead} /></td>
-                  <td className="plan__edit">{celula(lead, 'instagram', tr('Instagram'), { placeholder: '@' })}</td>
-                  {lead.fonte === 'manual'
-                    ? <td className="plan__edit">{celula(lead, 'origem', tr('Origem'))}</td>
-                    : <td className="nowrap">{ROTULO_FONTE[lead.fonte] ?? lead.fonte}</td>}
-                  <td className="nowrap">{ROTULO_CANAL[lead.canalPrimeiroContato] ?? ''}</td>
-                  <td className="nowrap">{dataCurta(lead.primeiroContatoEm)}</td>
-                  <td className="nowrap">{dataCurta(lead.ultimoContatoEm)}</td>
+                  <td className="plan__texto" onClick={() => abrir(lead)}>{[lead.cidade, lead.estado].filter(Boolean).join(' / ')}</td>
+                  <td className="leads__td-contato">
+                    {lead.telefone && <a className="link" href={`tel:${lead.telefone}`}>{lead.telefone}</a>}
+                    <CelulaEmail lead={lead} />
+                    {lead.instagram && <small>{lead.instagram}</small>}
+                  </td>
                   <td className="plan__edit">
                     <span className="leads__contatos">
                       <strong>{lead.numeroContatos ?? 0}</strong>
-                      <select className="plan__input" value="" onChange={(e) => registrarContato(lead._id, e.target.value)}
+                      <select className="plan__input plan__rapido" value="" onChange={(e) => registrarContato(lead._id, e.target.value)}
                         aria-label={tr('Registrar contato com {nome}', { nome: lead.nome })}>
                         <option value="">{tr('+ contato')}</option>
                         {CANAIS_CONTATO.map((c) => <option key={c.valor} value={c.valor}>{c.rotulo}</option>)}
                       </select>
                     </span>
+                    {lead.primeiroContatoEm && (
+                      <small className="leads__ultimo">
+                        {tr('1º: {canal} · {data}', { canal: ROTULO_CANAL[lead.canalPrimeiroContato] ?? '', data: dataCurta(lead.primeiroContatoEm) })}
+                        {lead.numeroContatos > 1 && <><br />{tr('último {data}', { data: dataCurta(lead.ultimoContatoEm) })}</>}
+                      </small>
+                    )}
                   </td>
                   <td className="plan__edit" data-estado={ESTADO_DA_SITUACAO[lead.status] ?? ''}>
-                    <select className="plan__input leads__status" value={lead.status}
+                    <select className="plan__input plan__rapido leads__status" value={lead.status}
                       onChange={(e) => salvar(lead._id, { status: e.target.value })} aria-label={tr('Status de {nome}', { nome: lead.nome })}>
                       {STATUS.map((s) => <option key={s.valor} value={s.valor}>{s.rotulo}</option>)}
                     </select>
                   </td>
-                  <td className="nowrap"><ProximoFollowUp lead={lead} /></td>
-                  <td className="plan__edit">{celula(lead, 'observacao', tr('Observações'))}</td>
+                  <td><ProximoFollowUp lead={lead} /></td>
+                  <td className="plan__texto leads__obs" onClick={() => abrir(lead)}>{lead.observacao}</td>
                   <td className="plan__acoes">
                     <div className="table__actions">
                       {podeEnviar && lead.email && (
@@ -307,7 +293,7 @@ export default function Leads() {
                           <Icone>{ICONES.email}</Icone>
                         </button>
                       )}
-                      <button type="button" className="icon-btn" aria-label={tr('Ver e editar')} title={tr('Ver e editar')} onClick={() => setAberto(lead)}>
+                      <button type="button" className="icon-btn" aria-label={tr('Ver e editar')} title={tr('Ver e editar')} onClick={() => abrir(lead)}>
                         <IconeLapis />
                       </button>
                       <ConfirmarNoLugar rotulo={tr('Excluir lead')} onConfirmar={() => excluir(lead._id)} />
@@ -337,7 +323,8 @@ export default function Leads() {
       )}
 
       {aberto && (
-        <LeadModal lead={aberto} erro={erro} onSalvar={salvar} onClose={() => setAberto(null)} />
+        <LeadModal lead={aberto === 'novo' ? null : aberto} erro={erro} onCriar={criar}
+          onSalvar={salvar} onClose={() => setAberto(null)} />
       )}
     </div>
   )

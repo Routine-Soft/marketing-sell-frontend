@@ -1,15 +1,36 @@
 import { localeAtual, tr } from '@/i18n'
 
-export const BLOCOS = {
-    leads: { nome: tr('1. Leads'), cor: '#2a7de1' },
-    contato: { nome: tr('2. Contato'), cor: '#19a568' },
-    follow_up: { nome: tr('3. Follow-up'), cor: '#e08a12' },
-    video: { nome: tr('4. Vídeo'), cor: '#d9447f' },
-    blog: { nome: tr('5. Blog'), cor: '#7646d8' },
-    parceiros: { nome: tr('6. Parceiros'), cor: '#c2710c' },
-    comunidades: { nome: tr('7. Comunidades'), cor: '#1fa5b3' },
-    fechamento: { nome: tr('8. Fechamento'), cor: '#64748b' },
-}
+export const DIAS_UTEIS = [
+    { valor: 1, rotulo: tr('Seg') },
+    { valor: 2, rotulo: tr('Ter') },
+    { valor: 3, rotulo: tr('Qua') },
+    { valor: 4, rotulo: tr('Qui') },
+    { valor: 5, rotulo: tr('Sex') },
+]
+
+export const TIPOS_DE_LINHA = [
+    { valor: 'tarefa', rotulo: tr('Tarefa'), dica: tr('Conta no % do dia.') },
+    { valor: 'opcional', rotulo: tr('Opcional'), dica: tr('Canal ou detalhe que você marca, mas não conta no %.') },
+    { valor: 'automatico', rotulo: tr('Automático'), dica: tr('Só mostra um número do dia, contado pelo sistema.') },
+]
+
+// "Marcar sozinha quando..." (tarefa) e "O que contar" (linha automática).
+export const AUTOS = [
+    { valor: '', rotulo: tr('Não: eu marco') },
+    { valor: 'leads', rotulo: tr('Leads cadastrados no dia chegarem na meta') },
+    { valor: 'primeirosContatos', rotulo: tr('Primeiros contatos do dia chegarem na meta') },
+    { valor: 'parceiros', rotulo: tr('Parceiros cadastrados no dia chegarem na meta') },
+    { valor: 'followUp', rotulo: tr('Não sobrar follow-up vencido') },
+]
+
+export const CONTAGENS = [
+    { valor: 'leads', rotulo: tr('Leads cadastrados no dia') },
+    { valor: 'primeirosContatos', rotulo: tr('Primeiros contatos no dia') },
+    { valor: 'followUps', rotulo: tr('Follow-ups feitos no dia') },
+    { valor: 'parceiros', rotulo: tr('Parceiros cadastrados no dia') },
+]
+
+export const CORES_DE_BLOCO = ['#2a7de1', '#19a568', '#e08a12', '#d9447f', '#7646d8', '#c2710c', '#1fa5b3', '#64748b']
 
 // 'AAAA-MM-DD' somado em dias, sem depender do fuso do aparelho.
 export function somarDias(dia, quantidade) {
@@ -38,14 +59,14 @@ export const diaDaSemanaCurto = (dia) => formatar(dia, { weekday: 'short' }).rep
 export const diaPorExtenso = (dia) => formatar(dia, { weekday: 'long', day: 'numeric', month: 'long' })
 
 export function valeNoDia(linha, dia) {
-    return !linha.dias || linha.dias.includes(new Date(`${dia}T12:00:00Z`).getUTCDay())
+    return !linha.dias?.length || linha.dias.includes(new Date(`${dia}T12:00:00Z`).getUTCDay())
 }
 
 export function frequenciaDe(linha) {
     if (linha.tipo === 'opcional') return tr('Opcional')
     if (linha.tipo === 'automatico') return tr('Automático')
-    if (!linha.dias) return tr('Diária')
-    return linha.dias.length === 1 ? tr('Sexta') : tr('Seg/Qua/Sex')
+    if (!linha.dias?.length) return tr('Diária')
+    return linha.dias.map((dia) => DIAS_UTEIS[dia - 1]?.rotulo).join('/')
 }
 
 // Estado de uma célula da grade, pelas mesmas regras de cor da planilha:
@@ -72,4 +93,24 @@ export function corDoPercentual(percentual) {
 
 export function porcentagem(parte, total) {
     return total ? `${((parte / total) * 100).toLocaleString(localeAtual(), { maximumFractionDigits: 1 })}%` : '—'
+}
+
+// Troca o item de lugar com o vizinho (delta -1 = sobe, 1 = desce).
+export function mover(lista, indice, delta) {
+    const destino = indice + delta
+    if (destino < 0 || destino >= lista.length) return lista
+    const nova = [...lista]
+    ;[nova[indice], nova[destino]] = [nova[destino], nova[indice]]
+    return nova
+}
+
+// Linhas na ordem dos blocos (a grade mostra bloco por bloco).
+export function linhasNaOrdemDosBlocos(blocos, linhas) {
+    return blocos.flatMap((bloco) => linhas.filter((linha) => linha.bloco === bloco.id))
+}
+
+export function descricaoDoAuto(linha) {
+    if (linha.tipo === 'automatico') return CONTAGENS.find((c) => c.valor === linha.contagem)?.rotulo ?? ''
+    if (!linha.auto) return ''
+    return AUTOS.find((a) => a.valor === linha.auto)?.rotulo ?? ''
 }

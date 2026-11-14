@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import TelaDePlanilha from '@/components/Planilha/TelaDePlanilha'
-import { useAuthContext } from '@/hooks/useAuthContext'
+import { useNegocio } from '@/hooks/useNegocio'
 import { usePainel } from '../rotina.hooks'
 import { porcentagem } from '../rotina.utils'
 import { localeAtual, tr } from '@/i18n'
@@ -9,7 +9,9 @@ import './painel.css'
 const numero = (valor) => valor.toLocaleString(localeAtual())
 
 // Verde quando bateu a meta, vermelho claro quando não (as mesmas cores da planilha).
-const peloAlvo = (valor, meta) => (valor >= meta ? 'feito' : 'falta')
+const peloAlvo = (valor, meta) => (!meta ? '' : valor >= meta ? 'feito' : 'falta')
+// Sem tarefa com meta na rotina do negócio, a meta fica em branco.
+const metaOuTraco = (meta) => meta ?? '—'
 
 function Tabela({ titulo, colunas, children }) {
   return (
@@ -46,16 +48,16 @@ function Conteudo({ painel }) {
       <div className="painel__coluna">
         <Tabela titulo={tr('Hoje')} colunas={[tr('Valor'), tr('Meta')]}>
           <Linha rotulo={tr('% da rotina de hoje')} valor={`${hoje.percentual}%`} meta="100%" estado={peloAlvo(hoje.percentual, 100)} link="/home" />
-          <Linha rotulo={tr('Leads cadastrados hoje')} valor={numero(hoje.leads)} meta={hoje.metaLeads} estado={peloAlvo(hoje.leads, hoje.metaLeads)} />
-          <Linha rotulo={tr('Primeiros contatos hoje')} valor={numero(hoje.primeirosContatos)} meta={hoje.metaContatos} estado={peloAlvo(hoje.primeirosContatos, hoje.metaContatos)} />
+          <Linha rotulo={tr('Leads cadastrados hoje')} valor={numero(hoje.leads)} meta={metaOuTraco(hoje.metaLeads)} estado={peloAlvo(hoje.leads, hoje.metaLeads)} />
+          <Linha rotulo={tr('Primeiros contatos hoje')} valor={numero(hoje.primeirosContatos)} meta={metaOuTraco(hoje.metaContatos)} estado={peloAlvo(hoje.primeirosContatos, hoje.metaContatos)} />
           <Linha rotulo={tr('Follow-ups pendentes (vencidos até hoje)')} valor={numero(hoje.followUpsPendentes)} meta=""
             estado={hoje.followUpsPendentes > 0 ? 'aviso' : ''} link="/leads?followUp=vencido" />
           <Linha rotulo={tr('Leads para encerrar (4 contatos sem resposta)')} valor={numero(hoje.paraEncerrar)} meta="" link="/leads?followUp=encerrar" />
         </Tabela>
 
         <Tabela titulo={tr('Esta semana (segunda até hoje)')} colunas={[tr('Valor'), tr('Meta')]}>
-          <Linha rotulo={tr('Leads cadastrados')} valor={numero(semana.leads)} meta={semana.metaLeads} estado={peloAlvo(semana.leads, semana.metaLeads)} />
-          <Linha rotulo={tr('Primeiros contatos')} valor={numero(semana.primeirosContatos)} meta={semana.metaContatos} estado={peloAlvo(semana.primeirosContatos, semana.metaContatos)} />
+          <Linha rotulo={tr('Leads cadastrados')} valor={numero(semana.leads)} meta={metaOuTraco(semana.metaLeads)} estado={peloAlvo(semana.leads, semana.metaLeads)} />
+          <Linha rotulo={tr('Primeiros contatos')} valor={numero(semana.primeirosContatos)} meta={metaOuTraco(semana.metaContatos)} estado={peloAlvo(semana.primeirosContatos, semana.metaContatos)} />
           <Linha rotulo={tr('Média da rotina')} valor={`${semana.mediaRotina}%`} meta="100%" estado={peloAlvo(semana.mediaRotina, 100)} />
         </Tabela>
 
@@ -88,11 +90,11 @@ function Conteudo({ painel }) {
 }
 
 export default function Painel() {
-  const { user } = useAuthContext()
+  const { negocio } = useNegocio()
   const { painel, erro } = usePainel()
 
   return (
-    <TelaDePlanilha titulo={`${tr('Painel')}${user?.nomeEmpresa ? ` — ${user.nomeEmpresa}` : ''}`} erro={erro} carregando={!painel && !erro}
+    <TelaDePlanilha titulo={`${tr('Painel')}${negocio ? ` — ${negocio.nome}` : ''}`} erro={erro} carregando={!painel && !erro}
       subtitulo={tr('Tudo aqui é automático. Você só alimenta as abas Rotina diária, Leads e Parceiros.')}>
       {painel && <Conteudo painel={painel} />}
     </TelaDePlanilha>

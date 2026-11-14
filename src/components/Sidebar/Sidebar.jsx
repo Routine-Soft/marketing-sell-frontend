@@ -8,41 +8,47 @@ import { iniciais } from '@/utils/nome'
 import Marca from './Marca'
 import BotaoInstalar from './BotaoInstalar'
 import { ICONES } from './menuIcones'
-import { ABAS } from './abas'
+import { abasDoNegocio } from './abas'
+import { useNegocio } from '@/hooks/useNegocio'
 import './Sidebar.css'
 import { tr } from '@/i18n';
 
 const TODOS = ['super_admin', 'admin', 'membro']
 
-const GRUPOS = [
-    {
-        titulo: tr('Planilha'),
-        itens: ABAS.map((aba) => ({ ...aba, roles: TODOS })),
-    },
-    {
-        titulo: tr('Ferramentas'),
-        itens: [
-            { label: tr('Buscar leads'), path: '/captacao', icone: 'captacao', roles: TODOS },
-            { label: tr('Remetentes de e-mail'), path: '/remetentes', icone: 'email', roles: ['admin', 'super_admin'] },
-        ],
-    },
-    {
-        titulo: tr('Conta'),
-        itens: [
-            { label: tr('Contas'), path: '/contas', icone: 'empresas', roles: ['super_admin'] },
-            { label: tr('Minha conta'), path: '/minha-conta', icone: 'usuarios', roles: TODOS },
-        ],
-    },
-]
+function gruposDoMenu(negocio) {
+    return [
+        {
+            titulo: tr('Planilha'),
+            itens: abasDoNegocio(negocio).map((aba) => ({ ...aba, roles: TODOS })),
+        },
+        {
+            titulo: tr('Ferramentas'),
+            itens: [
+                { label: tr('Buscar leads'), path: '/captacao', icone: 'captacao', roles: TODOS },
+                { label: tr('Editar rotina'), path: '/rotina/editar', icone: 'rotina', roles: ['admin', 'super_admin'] },
+                { label: tr('Remetentes de e-mail'), path: '/remetentes', icone: 'email', roles: ['admin', 'super_admin'] },
+            ],
+        },
+        {
+            titulo: tr('Conta'),
+            itens: [
+                { label: tr('Negócios'), path: '/negocios', icone: 'negocios', roles: TODOS },
+                { label: tr('Contas'), path: '/contas', icone: 'empresas', roles: ['super_admin'] },
+                { label: tr('Minha conta'), path: '/minha-conta', icone: 'usuarios', roles: TODOS },
+            ],
+        },
+    ]
+}
 
 export function Sidebar({ aberto = false, onFechar }) {
     const { user, hasRole, logout } = useAuthContext()
+    const { negocio } = useNegocio()
 
     async function handleLogout() {
         await logout()
     }
 
-    const grupos = GRUPOS
+    const grupos = gruposDoMenu(negocio)
         .map((grupo) => ({ ...grupo, itens: grupo.itens.filter((item) => item.roles.some((role) => hasRole(role))) }))
         .filter((grupo) => grupo.itens.length > 0)
 
@@ -50,12 +56,20 @@ export function Sidebar({ aberto = false, onFechar }) {
         <aside id="menu-principal" className={`sidebar${aberto ? ' is-aberto' : ''}`} aria-label={tr('Menu principal')}>
             <div className="sidebar__topo">
                 <Link to="/home" className="marca-link" aria-label={tr('Ir para o início')} onClick={onFechar}>
-                    <Marca empresa={user?.nomeEmpresa} />
+                    <Marca empresa={negocio?.nome ?? user?.nomeEmpresa} />
                 </Link>
                 <button type="button" className="icon-btn sidebar__fechar" aria-label={tr('Fechar menu')} onClick={onFechar}>
                     <IconeX />
                 </button>
             </div>
+
+            <Link to="/negocios" className="sidebar__negocio" onClick={onFechar} aria-label={tr('Trocar de negócio')}>
+                <span className="sidebar__negocio-textos">
+                    <small>{tr('Negócio aberto')}</small>
+                    <strong>{negocio?.nome ?? '…'}</strong>
+                </span>
+                <span className="sidebar__negocio-trocar">{tr('Trocar')}</span>
+            </Link>
 
             <nav className="sidebar__nav">
                 {grupos.map((grupo) => (

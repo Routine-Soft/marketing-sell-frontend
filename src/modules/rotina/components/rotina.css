@@ -1,9 +1,8 @@
 /* Grade da rotina: tarefas nas linhas, dias nas colunas (como a aba "Rotina diária" da planilha). */
+/* Do tamanho da tela: dias com largura fixa, a coluna da tarefa fica com o resto e quebra linha. */
 .rotina {
-  --larg-bloco: 124px;
-  --larg-tarefa: 330px;
-  width: max-content;
-  min-width: 100%;
+  --larg-bloco: 112px;
+  width: 100%;
 }
 
 .plan.rotina th {
@@ -31,9 +30,7 @@
 
 .plan.rotina .rotina__tarefa {
   left: var(--larg-bloco);
-  width: var(--larg-tarefa);
-  min-width: var(--larg-tarefa);
-  max-width: var(--larg-tarefa);
+  min-width: 200px;
   box-shadow: 2px 0 0 var(--plan-linha);
 }
 
@@ -75,13 +72,17 @@
 }
 
 .plan.rotina .rotina__meta {
-  width: 58px;
+  width: 52px;
   text-align: center;
 }
 
+.plan.rotina .rotina__freq {
+  width: 92px;
+}
+
 .plan.rotina thead .rotina__dia {
-  width: 62px;
-  min-width: 62px;
+  width: 50px;
+  min-width: 50px;
   height: 28px;
   padding: 4px 6px;
   text-align: center;
@@ -141,10 +142,14 @@
   display: none;
 }
 
-@media (max-width: 760px) {
-  .rotina {
-    --larg-tarefa: 158px;
+/* Tela média: a frequência sai para sobrar espaço para a tarefa. */
+@media (max-width: 1180px) {
+  .plan.rotina .rotina__freq {
+    display: none;
   }
+}
+
+@media (max-width: 760px) {
 
   .plan.rotina .rotina__bloco,
   .plan.rotina .rotina__meta,
@@ -154,6 +159,8 @@
 
   .plan.rotina .rotina__tarefa {
     left: 0;
+    width: 150px;
+    min-width: 150px;
     padding: 6px 8px;
     font-size: 0.8rem;
     line-height: 1.3;

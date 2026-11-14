@@ -276,3 +276,55 @@
   margin: 0 4px;
   border-radius: 4px;
 }
+
+/* Negócio aberto: atalho para trocar de negócio. */
+.sidebar__negocio {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  margin: 0 14px 10px;
+  color: inherit;
+  text-decoration: none;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color 0.2s var(--ease);
+}
+
+.sidebar__negocio:hover {
+  border-color: var(--primary);
+}
+
+.sidebar__negocio:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.sidebar__negocio-textos {
+  display: grid;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.sidebar__negocio-textos small {
+  font-size: 0.72rem;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sidebar__negocio-textos strong {
+  overflow: hidden;
+  font-size: 0.92rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar__negocio-trocar {
+  flex: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary);
+}

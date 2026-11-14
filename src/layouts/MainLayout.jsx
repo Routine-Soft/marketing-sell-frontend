@@ -3,12 +3,14 @@ import { Link, useLocation } from 'react-router-dom'
 import Sidebar from '@/components/Sidebar/Sidebar'
 import Marca from '@/components/Sidebar/Marca'
 import { abaDoCaminho } from '@/components/Sidebar/abas'
+import { useNegocio } from '@/hooks/useNegocio'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import './MainLayout.css'
 import { tr } from '@/i18n';
 
 export function MainLayout({ children }) {
     const { user } = useAuthContext()
+    const { negocio } = useNegocio()
     const [menuAberto, setMenuAberto] = useState(false)
     // Cada tela usa a cor da sua aba (cabeçalho da grade, faixa do título).
     const aba = abaDoCaminho(useLocation().pathname)
@@ -48,7 +50,7 @@ export function MainLayout({ children }) {
                     </svg>
                 </button>
                 <Link to="/home" className="marca-link" aria-label={tr('Ir para o início')}>
-                    <Marca empresa={user?.nomeEmpresa} />
+                    <Marca empresa={negocio?.nome ?? user?.nomeEmpresa} />
                 </Link>
             </header>
 

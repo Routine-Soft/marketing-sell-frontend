@@ -205,6 +205,77 @@
   text-decoration: line-through;
 }
 
+/* Grade do tamanho da tela: as colunas dividem a largura e o texto quebra linha. */
+.plan.plan--ajustada {
+  width: 100%;
+  min-width: 640px;
+  table-layout: fixed;
+}
+
+.plan--ajustada td,
+.plan--ajustada th {
+  overflow-wrap: break-word;
+}
+
+.plan--ajustada thead th {
+  white-space: normal;
+}
+
+.plan .plan__col-num {
+  width: 38px;
+}
+
+.plan .plan__col-acoes {
+  width: 84px;
+}
+
+.plan__texto {
+  cursor: pointer;
+}
+
+.plan__linha:hover > td {
+  box-shadow: inset 0 0 0 9999px color-mix(in srgb, var(--aba-cor) 6%, transparent);
+}
+
+.plan__sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.76rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.plan td.plan__principal {
+  font-weight: 600;
+}
+
+.plan-dica {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Formulário do modal de adicionar/editar: duas colunas no computador, uma no celular. */
+.item-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+}
+
+.item-form__largo,
+.item-form__check {
+  grid-column: 1 / -1;
+}
+
+.item-form__check {
+  justify-self: start;
+}
+
+@media (max-width: 640px) {
+  .item-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* Campos dentro da célula: sem borda, como digitar direto na planilha. */
 .plan td.plan__edit {
   padding: 0;
@@ -229,11 +300,6 @@ select.plan__input {
   cursor: pointer;
 }
 
-/* Data vazia não mostra "dd/mm/aaaa" em toda linha: só aparece ao tocar no campo. */
-.plan__input[type='date'][data-vazio='true']:not(:focus) {
-  color: transparent;
-}
-
 .plan__input::placeholder {
   color: var(--text-subtle);
 }
@@ -254,23 +320,6 @@ select.plan__input {
 
 .plan__caixa:disabled {
   cursor: default;
-}
-
-.plan__com-link {
-  display: flex;
-  align-items: center;
-}
-
-.plan__com-link a {
-  flex: none;
-  padding: 0 8px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--aba-cor);
-}
-
-.plan__nova > td {
-  background: var(--plan-fixo);
 }
 
 .plan__acoes {
