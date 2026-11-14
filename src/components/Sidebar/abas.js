@@ -3,6 +3,8 @@ import { tr } from '@/i18n'
 // As abas da planilha no menu lateral, na ordem e nas cores das abas da planilha.
 export const ABAS = [
     { id: 'rotina', label: tr('Rotina diária'), path: '/home', cor: 'var(--aba-rotina)' },
+    { id: 'videos', label: tr('Ideias de vídeo'), path: '/ideias-video', cor: 'var(--aba-videos)', sempre: true },
+    { id: 'artigos', label: tr('Ideias de artigo'), path: '/ideias-artigo', cor: 'var(--aba-artigos)', sempre: true },
     { id: 'painel', label: tr('Painel'), path: '/painel', cor: 'var(--aba-painel)' },
     { id: 'leads', label: tr('Leads'), path: '/leads', cor: 'var(--aba-leads)' },
     { id: 'parceiros', label: tr('Parceiros'), path: '/parceiros', cor: 'var(--aba-parceiros)' },
@@ -15,7 +17,7 @@ export function abaDoCaminho(caminho) {
     return ABAS.find((aba) => caminho.startsWith(aba.path))
 }
 
-// Abas que o negócio mostra no menu: a Rotina diária sempre, as outras conforme o negócio.
+// Abas que o negócio mostra no menu: Rotina diária e ideias sempre, as outras conforme o negócio.
 export function abasDoNegocio(negocio) {
-    return ABAS.filter((aba) => aba.id === 'rotina' || negocio?.abas?.includes(aba.id))
+    return ABAS.filter((aba) => aba.id === 'rotina' || aba.sempre || negocio?.abas?.includes(aba.id))
 }

@@ -30,7 +30,7 @@ function Campo({ coluna, valor, onMudar }) {
       </select>
     )
   } else if (coluna.tipo === 'textarea') {
-    campo = <textarea id={id} className="input textarea" rows={3} value={valor} onChange={(e) => onMudar(e.target.value)} maxLength={coluna.maximo ?? 2000} />
+    campo = <textarea id={id} className="input textarea" rows={coluna.linhas ?? 3} value={valor} onChange={(e) => onMudar(e.target.value)} maxLength={coluna.maximo ?? 2000} />
   } else {
     const tipo = { data: 'date', link: 'text' }[coluna.tipo] ?? coluna.tipoDoCampo ?? 'text'
     campo = (
@@ -47,9 +47,10 @@ function Campo({ coluna, valor, onMudar }) {
 }
 
 // Modal de adicionar ou editar uma linha da planilha, montado com as mesmas colunas da tabela.
-export default function ItemModal({ titulo, colunas, item, erro, onSalvar, onClose }) {
+// iniciais = valores que já vêm preenchidos ao adicionar (ex.: o dia em que a pessoa tocou).
+export default function ItemModal({ titulo, colunas, item, iniciais, erro, onSalvar, onClose }) {
   const doFormulario = colunas.filter((coluna) => coluna.tipo !== 'leitura' && coluna.formulario !== false)
-  const [form, setForm] = useState(() => Object.fromEntries(doFormulario.map((coluna) => [coluna.campo, valorInicial(coluna, item)])))
+  const [form, setForm] = useState(() => Object.fromEntries(doFormulario.map((coluna) => [coluna.campo, valorInicial(coluna, item ?? iniciais)])))
 
   return (
     <Modal title={titulo} onClose={onClose} wide={doFormulario.length > 4}>

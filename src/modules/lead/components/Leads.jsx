@@ -67,6 +67,7 @@ export default function Leads() {
   const [texto, setTexto] = useState(filtros.busca)
   const [selecionados, setSelecionados] = useState(() => new Set())
   const [aberto, setAberto] = useState(null)
+  const [todosDe, setTodosDe] = useState(null)
 
   function mudarFiltro(campo, valor) {
     setParams((atual) => {
@@ -96,6 +97,10 @@ export default function Leads() {
   const idsVisiveis = itens.map((l) => l._id)
   const escolhidos = idsVisiveis.filter((id) => selecionados.has(id))
   const todosMarcados = idsVisiveis.length > 0 && escolhidos.length === idsVisiveis.length
+  // "Todos os leads da lista" (não só os da página) vale para os filtros em que foi escolhido.
+  const chaveDosFiltros = JSON.stringify(filtros)
+  const todosDaLista = todosMarcados && todosDe === chaveDosFiltros && total > itens.length
+  const quantosEscolhidos = todosDaLista ? total : escolhidos.length
   const totalPaginas = Math.max(1, Math.ceil(total / porPagina))
   const temFiltro = Object.values(filtros).some(Boolean)
 
@@ -110,16 +115,23 @@ export default function Leads() {
 
   function alternarTodos() {
     setSelecionados(todosMarcados ? new Set() : new Set(idsVisiveis))
+    setTodosDe(null)
+  }
+
+  function limparSelecao() {
+    setSelecionados(new Set())
+    setTodosDe(null)
   }
 
   function enviado(mensagem) {
-    setSelecionados(new Set())
+    limparSelecao()
     depoisDoEnvio(mensagem)
   }
 
   async function acaoEmLote(acao) {
-    const resposta = await acao(escolhidos)
-    if (resposta) setSelecionados(new Set())
+    const filtrosPreenchidos = Object.fromEntries(Object.entries(filtros).filter(([, valor]) => valor))
+    const resposta = await acao(todosDaLista ? { todos: true, filtros: filtrosPreenchidos } : { ids: escolhidos })
+    if (resposta) limparSelecao()
   }
 
   function abrir(lead) {
@@ -192,14 +204,21 @@ export default function Leads() {
 
       {escolhidos.length > 0 && (
         <div className="leads__lote" role="toolbar" aria-label={tr('Ações com os selecionados')}>
-          <strong>{escolhidos.length === 1 ? tr('1 selecionado') : tr('{n} selecionados', { n: escolhidos.length })}</strong>
-          {podeEnviar && (
+          <strong>{quantosEscolhidos === 1 ? tr('1 selecionado') : tr('{n} selecionados', { n: quantosEscolhidos.toLocaleString(localeAtual()) })}</strong>
+          {todosMarcados && total > itens.length && (todosDaLista ? (
+            <button type="button" className="btn btn--sm btn--ghost" onClick={limparSelecao}>{tr('Limpar seleção')}</button>
+          ) : (
+            <button type="button" className="btn btn--sm btn--ghost" onClick={() => setTodosDe(chaveDosFiltros)}>
+              {temFiltro ? tr('Selecionar todos os {n} desta lista', { n: total.toLocaleString(localeAtual()) }) : tr('Selecionar todos os {n} leads', { n: total.toLocaleString(localeAtual()) })}
+            </button>
+          ))}
+          {podeEnviar && !todosDaLista && (
             <button type="button" className="btn btn--sm btn--primary" onClick={() => setEnviarPara(escolhidos)}>
               <Icone>{ICONES.email}</Icone> {tr('Enviar e-mail')}
             </button>
           )}
           <button type="button" className="btn btn--sm btn--ghost" onClick={() => acaoEmLote(procurarEmails)}>{tr('Procurar e-mail no site')}</button>
-          <ConfirmarNoLugar rotulo={tr('Excluir selecionados')} pergunta={tr('Excluir {n}?', { n: escolhidos.length })} onConfirmar={() => acaoEmLote(excluirVarios)} />
+          <ConfirmarNoLugar rotulo={tr('Excluir selecionados')} pergunta={tr('Excluir {n}?', { n: quantosEscolhidos.toLocaleString(localeAtual()) })} onConfirmar={() => acaoEmLote(excluirVarios)} />
         </div>
       )}
 

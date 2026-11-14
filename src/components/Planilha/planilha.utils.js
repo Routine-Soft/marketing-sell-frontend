@@ -3,6 +3,8 @@ import { localeAtual } from '@/i18n'
 // Data do servidor → 'AAAA-MM-DD' no dia de Brasília (o valor do campo de data).
 export function diaDaData(valor) {
     if (!valor) return ''
+    // Já é um dia ('AAAA-MM-DD'): não passa pelo fuso.
+    if (/^\d{4}-\d{2}-\d{2}$/.test(valor)) return valor
     return new Date(new Date(valor).getTime() - 3 * 60 * 60 * 1000).toISOString().slice(0, 10)
 }
 

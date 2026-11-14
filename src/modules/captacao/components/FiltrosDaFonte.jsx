@@ -1,4 +1,5 @@
 import { rotuloDaOpcao } from '../captacao.utils'
+import AtividadesCnpj from './AtividadesCnpj'
 import { tr } from '@/i18n'
 
 function Campo({ id, rotulo, dica, children, largo = false }) {
@@ -100,6 +101,30 @@ export default function FiltrosDaFonte({ fonte, filtros, mudar, opcoes }) {
           <input id="novas-cidade" className="input" value={filtros.cidade} onChange={(e) => mudar('cidade', e.target.value)} />
         </Campo>
         <Quantidade id="novas-quantidade" valor={filtros.quantidade} maximo={2000} onChange={(v) => mudar('quantidade', v)} />
+      </>
+    )
+  }
+
+  if (fonte === 'cnpj') {
+    return (
+      <>
+        <AtividadesCnpj iniciais={opcoes.atividadesCnpj} selecionadas={filtros.cnaes} onSelecionar={(cnaes) => mudar('cnaes', cnaes)} />
+        <Campo id="cnpj-uf" rotulo={tr('Estado (opcional)')}>
+          <SeletorEstado id="cnpj-uf" valor={filtros.uf} estados={opcoes.cnpj.ufs} onChange={(v) => mudar('uf', v)} obrigatorio={false} />
+        </Campo>
+        <Campo id="cnpj-cidade" rotulo={tr('Cidade (opcional)')} dica={tr('O nome inteiro da cidade, ex.: Niterói')}>
+          <input id="cnpj-cidade" className="input" value={filtros.cidade} onChange={(e) => mudar('cidade', e.target.value)} />
+        </Campo>
+        <Campo id="cnpj-dias" rotulo={tr('Abertas nos últimos')}>
+          <select id="cnpj-dias" className="input" value={filtros.dias} onChange={(e) => mudar('dias', Number(e.target.value))}>
+            {[30, 60, 90, 180, 365].map((dias) => <option key={dias} value={dias}>{tr('{n} dias', { n: dias })}</option>)}
+          </select>
+        </Campo>
+        <Quantidade id="cnpj-quantidade" valor={filtros.quantidade} maximo={500} onChange={(v) => mudar('quantidade', v)} />
+        <label className="check filtro-telefone">
+          <input type="checkbox" checked={filtros.comTelefone} onChange={(e) => mudar('comTelefone', e.target.checked)} />
+          {tr('Só com telefone')}
+        </label>
       </>
     )
   }

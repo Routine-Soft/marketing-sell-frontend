@@ -1,0 +1,198 @@
+/* Ideias da semana: um bloco por dia, com os cartões de roteiro e legenda lado a lado. */
+.ideias {
+  display: grid;
+  gap: 14px;
+  /* A posição ao carregar dias anteriores é mantida à mão (ver Ideias.jsx). */
+  overflow-anchor: none;
+}
+
+.ideias-dia {
+  display: grid;
+  gap: 12px;
+  padding: 14px 16px 16px;
+  background: var(--plan-fundo);
+  border: 1px solid var(--plan-linha);
+  border-left: 4px solid var(--aba-cor);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.ideias-dia[data-hoje='true'] {
+  border-left-color: var(--plan-hoje-bg);
+  box-shadow: 0 0 0 1px var(--plan-hoje-bg), var(--shadow-sm);
+}
+
+.ideias-dia__topo {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.ideias-dia__topo h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--aba-cor);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ideias-dia[data-hoje='true'] .ideias-dia__topo h3 {
+  color: var(--text);
+}
+
+.ideias-dia__nova {
+  margin-left: auto;
+}
+
+.ideias-dia__vazio {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-subtle);
+}
+
+.ideias-dia__lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 12px;
+}
+
+.ideia {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--plan-linha);
+  border-radius: var(--radius-md);
+  transition: box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+.ideia:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.ideia[data-estado='feito'] {
+  background: color-mix(in srgb, var(--plan-feito-bg) 45%, var(--surface));
+}
+
+.ideia[data-estado='info'] {
+  background: color-mix(in srgb, var(--plan-info-bg) 45%, var(--surface));
+}
+
+.ideia__topo {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.ideia__titulo,
+.ideia__corpo {
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+.ideia__titulo {
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.ideia__titulo:focus-visible,
+.ideia__corpo:focus-visible {
+  outline: 2px solid var(--aba-cor);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.ideia__status {
+  flex: none;
+  width: auto;
+  min-height: 0;
+  padding: 4px 26px 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background-position: right 6px center;
+}
+
+.ideia__corpo {
+  display: grid;
+  gap: 4px;
+}
+
+.ideia__rotulo {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-subtle);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ideia__texto {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  white-space: pre-line;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+
+.ideia__texto--curto {
+  -webkit-line-clamp: 3;
+}
+
+.ideia__acoes {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.ideia__icones {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ideia {
+    transition: none;
+  }
+
+  .ideia:hover {
+    transform: none;
+  }
+}
+
+/* Ao rolar até um dia (abrir a tela, botão "Hoje"), ele fica logo abaixo do topo, sem ficar sob a barra do celular. */
+.ideias__dia {
+  scroll-margin-top: 16px;
+}
+
+.ideias__dia > .ideias-dia {
+  height: 100%;
+}
+
+.ideias__ponta {
+  padding: 8px;
+  font-size: 0.8rem;
+  color: var(--text-subtle);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .ideias__dia {
+    scroll-margin-top: 76px;
+  }
+}

@@ -137,3 +137,71 @@
   gap: 10px;
   margin-bottom: 24px;
 }
+
+.filtro-telefone {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+/* Atividades (CNAE) da busca de CNPJs. */
+.atividades {
+  display: grid;
+  gap: 10px;
+}
+
+.atividades__lista,
+.atividades__achadas {
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.atividades__item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.atividades__item .check {
+  flex: 1;
+  min-width: 0;
+  border-radius: var(--radius-md);
+}
+
+.atividades__item small,
+.atividades__achada small {
+  margin-left: 6px;
+  font-size: 0.75rem;
+  color: var(--text-subtle);
+}
+
+.atividades__achadas {
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.atividades__achada {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 10px;
+  font: inherit;
+  line-height: 1.4;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+}
+
+.atividades__achada:hover,
+.atividades__achada:focus-visible {
+  background: var(--primary-soft);
+  outline: none;
+}

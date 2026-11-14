@@ -69,8 +69,8 @@ export function useLeads(filtros, pagina) {
         salvar: (id, campos) => executar(() => atualizarLead(id, campos), (r) => trocarLead(r.data)),
         registrarContato: (id, canal) => executar(() => registrarContato(id, canal), (r) => trocarLead(r.data)),
         excluir: (id) => executar(() => excluirLead(id), recarregar),
-        excluirVarios: (ids) => executar(() => excluirLeads(ids), recarregar),
-        procurarEmails: (ids) => executar(() => procurarEmails(ids), recarregar),
+        excluirVarios: (selecao) => executar(() => excluirLeads(selecao), recarregar),
+        procurarEmails: (selecao) => executar(() => procurarEmails(selecao), recarregar),
         depoisDoEnvio(mensagem) {
             setErro(null)
             setSucesso(mensagem)
