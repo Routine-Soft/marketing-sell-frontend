@@ -68,7 +68,7 @@ export function useAtividadesCnpj(iniciais) {
     async function guardar(nova) {
         setErro(null)
         try {
-            const resposta = await editarNegocio(negocio._id, { cnaesCnpj: nova.map((atividade) => atividade.codigo) })
+            const resposta = await editarNegocio(negocio._id, { cnaesCnpj: nova.filter((atividade) => !atividade.total).map((atividade) => atividade.codigo) })
             trocarNegocio(resposta.data)
             setLista(nova)
             return true
@@ -85,7 +85,7 @@ export function useAtividadesCnpj(iniciais) {
         setTermo,
         achadas: limpo.length >= 2 && achadas.termo === limpo ? achadas.itens.filter((a) => !lista.some((b) => b.codigo === a.codigo)).slice(0, 10) : [],
         erro,
-        adicionar: (atividade) => guardar([...lista, { ...atividade, naBase: false }]),
+        adicionar: (atividade) => guardar([...lista, { ...atividade, total: 0 }]),
         remover: (codigo) => guardar(lista.filter((atividade) => atividade.codigo !== codigo)),
     }
 }

@@ -40,7 +40,7 @@ export default function Captacao() {
   function escolherFonte(id) {
     setFonte(id)
     // CNPJs: já vêm marcadas as atividades que o negócio guardou.
-    setFiltros(id === 'cnpj' ? { ...FILTROS_INICIAIS.cnpj, cnaes: opcoes.atividadesCnpj.map((atividade) => atividade.codigo) } : FILTROS_INICIAIS[id])
+    setFiltros(FILTROS_INICIAIS[id])
   }
 
   function mudar(campo, valor) {

@@ -1,9 +1,9 @@
 import { IconeBusca, IconeX } from '@/components/CrudCard/icones'
 import { useAtividadesCnpj } from '../captacao.hooks'
-import { tr } from '@/i18n'
+import { tr, localeAtual } from '@/i18n'
 
-// Atividades (CNAE) da busca de CNPJs: as que o negócio guardou (marcar = entra nesta busca) e a busca pelo nome
-// para acrescentar outras. A lista fica guardada no negócio e entra na importação mensal da Receita.
+// Atividades (CNAE) da busca de CNPJs: as que já estão na base, com quantas empresas cada uma tem (marcar = entra nesta
+// busca; nenhuma marcada = todas), e a busca pelo nome para acrescentar outras, que ficam guardadas no negócio.
 export default function AtividadesCnpj({ iniciais, selecionadas, onSelecionar }) {
   const { lista, termo, setTermo, achadas, erro, adicionar, remover } = useAtividadesCnpj(iniciais)
   const alternar = (codigo) => onSelecionar(selecionadas.includes(codigo) ? selecionadas.filter((c) => c !== codigo) : [...selecionadas, codigo])
@@ -27,6 +27,8 @@ export default function AtividadesCnpj({ iniciais, selecionadas, onSelecionar })
       {lista.length === 0 ? (
         <p className="field__hint">{tr('Nenhuma atividade ainda. Procure abaixo pelo nome do nicho (ex.: psicologia, academia, salão de beleza).')}</p>
       ) : (
+        <>
+        <p className="field__hint">{selecionadas.length ? tr('{n} marcadas.', { n: selecionadas.length }) : tr('Nenhuma marcada: a busca traz todas as atividades da lista.')}</p>
         <ul className="atividades__lista">
           {lista.map((atividade) => (
             <li key={atividade.codigo} className="atividades__item">
@@ -34,13 +36,20 @@ export default function AtividadesCnpj({ iniciais, selecionadas, onSelecionar })
                 <input type="checkbox" checked={selecionadas.includes(atividade.codigo)} onChange={() => alternar(atividade.codigo)} />
                 <span>{atividade.descricao || atividade.codigo} <small>{atividade.codigo}</small></span>
               </label>
-              {!atividade.naBase && <span className="badge badge--warning" title={tr('A Receita é consultada de madrugada: amanhã já aparece.')}>{tr('Entra amanhã')}</span>}
-              <button type="button" className="icon-btn" aria-label={tr('Tirar {nome}', { nome: atividade.descricao })} title={tr('Tirar da lista')} onClick={() => tirar(atividade.codigo)}>
-                <IconeX />
-              </button>
+              {atividade.total > 0 ? (
+                <span className="badge" title={tr('Empresas desta atividade na base')}>{atividade.total.toLocaleString(localeAtual())}</span>
+              ) : (
+                <>
+                  <span className="badge badge--warning" title={tr('Esta atividade ainda não foi trazida da Receita.')}>{tr('Fora da base')}</span>
+                  <button type="button" className="icon-btn" aria-label={tr('Tirar {nome}', { nome: atividade.descricao })} title={tr('Tirar da lista')} onClick={() => tirar(atividade.codigo)}>
+                    <IconeX />
+                  </button>
+                </>
+              )}
             </li>
           ))}
         </ul>
+        </>
       )}
 
       <label className="search atividades__busca">
