@@ -607,6 +607,7 @@ export default {
 
   // Ideias de vídeo e artigo, CNPJs da Receita e seleção de todos os leads
   '1º: {canal} · {data}': '1st: {canal} · {data}',
+  'Aberta em {data}': 'Registered on {data}',
 
   // Atividades (CNAE) da busca de CNPJs e rolagem das ideias
   'Canal do 1º contato': '1st contact channel',

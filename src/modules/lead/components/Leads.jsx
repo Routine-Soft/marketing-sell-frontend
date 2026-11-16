@@ -277,6 +277,7 @@ export default function Leads() {
                   <td className="plan__texto" onClick={() => abrir(lead)}>
                     <strong className="leads__nome">{lead.nome}</strong>
                     {lead.categoria && <small>{lead.categoria}</small>}
+                    {lead.extras?.abertura && <small>{tr('Aberta em {data}', { data: dataCurta(lead.extras.abertura) })}</small>}
                     <small>{[lead.fonte === 'manual' ? lead.origem : (ROTULO_FONTE[lead.fonte] ?? lead.fonte), dataCurta(lead.createdAt)].filter(Boolean).join(' · ')}</small>
                   </td>
                   <td className="plan__texto" onClick={() => abrir(lead)}>{[lead.cidade, lead.estado].filter(Boolean).join(' / ')}</td>

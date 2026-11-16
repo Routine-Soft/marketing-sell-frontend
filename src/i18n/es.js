@@ -579,6 +579,7 @@ export default {
 
   // Negócios, modelos e rotina editável
   '1º: {canal} · {data}': '1.º: {canal} · {data}',
+  'Aberta em {data}': 'Abierta el {data}',
 
   // Ideias de vídeo e artigo, CNPJs da Receita e seleção de todos os leads
   'Canal do 1º contato': 'Canal del 1.er contacto',
