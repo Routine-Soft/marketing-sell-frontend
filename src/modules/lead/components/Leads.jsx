@@ -40,7 +40,7 @@ function CelulaEmail({ lead }) {
 }
 
 // Cor da célula de situação, pelas regras da planilha.
-const ESTADO_DA_SITUACAO = { cliente: 'feito', descartado: 'inativo', demo: 'destaque', teste_gratis: 'destaque', respondeu: 'info', interessado: 'info' }
+const ESTADO_DA_SITUACAO = { cliente: 'feito', descartado: 'inativo', demo: 'destaque', teste_gratis: 'destaque', respondeu: 'info', follow_up: 'info', interessado: 'info' }
 const ROTULO_CANAL = Object.fromEntries(CANAIS_CONTATO.map((canal) => [canal.valor, canal.rotulo]))
 
 // Próximo follow-up (3, 7 e 14 dias depois do primeiro contato) ou o aviso de encerrar.

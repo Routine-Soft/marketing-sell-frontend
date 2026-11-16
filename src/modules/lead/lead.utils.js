@@ -4,6 +4,7 @@ export const STATUS = [
     { valor: 'novo', rotulo: tr('Novo'), tom: 'info' },
     { valor: 'contatado', rotulo: tr('Contatado'), tom: 'warning' },
     { valor: 'respondeu', rotulo: tr('Respondeu'), tom: 'primary' },
+    { valor: 'follow_up', rotulo: tr('Follow-up'), tom: 'warning' },
     { valor: 'interessado', rotulo: tr('Interessado'), tom: 'primary' },
     { valor: 'demo', rotulo: tr('Demo marcada'), tom: 'primary' },
     { valor: 'teste_gratis', rotulo: tr('Teste grátis'), tom: 'primary' },
