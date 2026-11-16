@@ -117,7 +117,7 @@ export default function FiltrosDaFonte({ fonte, filtros, mudar, opcoes }) {
         </Campo>
         <Campo id="cnpj-dias" rotulo={tr('Abertas nos últimos')}>
           <select id="cnpj-dias" className="input" value={filtros.dias} onChange={(e) => mudar('dias', Number(e.target.value))}>
-            {[30, 60, 90, 180, 365].map((dias) => <option key={dias} value={dias}>{tr('{n} dias', { n: dias })}</option>)}
+            {[30, 60, 90].map((dias) => <option key={dias} value={dias}>{tr('{n} dias', { n: dias })}</option>)}
           </select>
         </Campo>
         <Quantidade id="cnpj-quantidade" valor={filtros.quantidade} maximo={500} onChange={(v) => mudar('quantidade', v)} />

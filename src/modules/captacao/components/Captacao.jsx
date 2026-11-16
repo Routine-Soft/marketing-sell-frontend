@@ -98,7 +98,7 @@ export default function Captacao() {
 
               {fonte === 'cnpj' && (opcoes.baseCnpj ? (
                 <p className="alert alert--info">
-                  {tr('Base da Receita de {mes}: {n} empresas ativas abertas no último ano nas atividades escolhidas.', {
+                  {tr('Base da Receita de {mes}: {n} empresas ativas abertas nos últimos 3 meses.', {
                     mes: mesDaCompetencia(opcoes.baseCnpj._id),
                     n: opcoes.baseCnpj.estabelecimentos.toLocaleString(localeAtual()),
                   })}

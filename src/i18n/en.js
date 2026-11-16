@@ -666,7 +666,7 @@ export default {
   'Acrescentar atividade: psicologia, academia, 9602501...': 'Add activity: psicologia, academia, 9602501...',
   'Procurar atividade': 'Search activity',
   'Atividades encontradas': 'Activities found',
-  'Base da Receita de {mes}: {n} empresas ativas abertas no último ano nas atividades escolhidas.': 'Federal Revenue database from {mes}: {n} active companies opened in the last year in the chosen activities.',
+  'Base da Receita de {mes}: {n} empresas ativas abertas nos últimos 3 meses.': 'Federal Revenue database from {mes}: {n} active companies opened in the last 3 months.',
   'Banco de ideias ({n})': 'Idea bank ({n})',
   'Carregando dias anteriores...': 'Loading earlier days...',
   'Carregando mais dias...': 'Loading more days...',
