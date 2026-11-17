@@ -4,10 +4,10 @@ import LeadModal from './LeadModal'
 import EnviarEmailModal from '@/modules/envio/components/EnviarEmailModal'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import ConfirmarNoLugar from '@/components/ConfirmarNoLugar/ConfirmarNoLugar'
-import { Icone, IconeBusca, IconeLapis, IconeMais, IconeSetaDir, IconeSetaEsq, IconeX } from '@/components/CrudCard/icones'
+import { Icone, IconeBusca, IconeLapis, IconeMais, IconeSetaDir, IconeSetaEsq, IconeWhatsapp, IconeX } from '@/components/CrudCard/icones'
 import { ICONES } from '@/components/Sidebar/menuIcones'
 import { useLeads } from '../lead.hooks'
-import { CANAIS_CONTATO, FILTROS_VAZIOS, ROTULO_EMAIL, ROTULO_FONTE, STATUS, emBuscaDeEmail, situacaoDoFollowUp } from '../lead.utils'
+import { CANAIS_CONTATO, FILTROS_VAZIOS, ROTULO_EMAIL, ROTULO_FONTE, STATUS, emBuscaDeEmail, linkWhatsapp, situacaoDoFollowUp } from '../lead.utils'
 import { dataCurta } from '@/components/Planilha/planilha.utils'
 import { formatarData } from '@/modules/captacao/captacao.utils'
 import { localeAtual, tr } from '@/i18n'
@@ -282,7 +282,17 @@ export default function Leads() {
                   </td>
                   <td className="plan__texto" onClick={() => abrir(lead)}>{[lead.cidade, lead.estado].filter(Boolean).join(' / ')}</td>
                   <td className="leads__td-contato">
-                    {lead.telefone && <a className="link" href={`tel:${lead.telefone}`}>{lead.telefone}</a>}
+                    {lead.telefone && (
+                      <span className="leads__telefone">
+                        <a className="link" href={`tel:${lead.telefone}`}>{lead.telefone}</a>
+                        {linkWhatsapp(lead) && (
+                          <a className="leads__whatsapp" href={linkWhatsapp(lead)} target="_blank" rel="noopener noreferrer"
+                            aria-label={tr('Chamar {nome} no WhatsApp', { nome: lead.nome })} title={tr('Abrir WhatsApp')}>
+                            <IconeWhatsapp />
+                          </a>
+                        )}
+                      </span>
+                    )}
                     <CelulaEmail lead={lead} />
                     {lead.instagram && <small>{lead.instagram}</small>}
                   </td>

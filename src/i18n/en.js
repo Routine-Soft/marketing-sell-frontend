@@ -298,6 +298,8 @@ export default {
   'Follow-up': 'Follow-up',
   'Follow-up: todos': 'Follow-up: all',
   'Follow-up para hoje': 'Follow-up due today',
+  'Chamar {nome} no WhatsApp': 'Message {nome} on WhatsApp',
+  'Abrir WhatsApp': 'Open WhatsApp',
   'Registrar contato com {nome}': 'Log contact with {nome}',
   'Contatos feitos': 'Contacts made',
   'último em {data}': 'last on {data}',

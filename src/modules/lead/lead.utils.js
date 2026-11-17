@@ -101,3 +101,16 @@ export function linkDoSite(site) {
 export function siteSemProtocolo(site) {
     return site.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '')
 }
+
+// Fontes de leads dos EUA (telefone de 10 dígitos leva o código 1); as demais são do Brasil (código 55).
+const FONTES_EUA = ['npi', 'empresas_novas', 'licencas']
+
+// Link do WhatsApp (wa.me) a partir do telefone do lead; vazio se o número não parece válido.
+export function linkWhatsapp(lead) {
+    const bruto = (lead.telefone || '').trim()
+    let digitos = bruto.replace(/\D/g, '').replace(/^00/, '')
+    if (!bruto.startsWith('+') && (digitos.length === 10 || digitos.length === 11)) {
+        digitos = (FONTES_EUA.includes(lead.fonte) ? '1' : '55') + digitos
+    }
+    return digitos.length >= 11 && digitos.length <= 15 ? `https://wa.me/${digitos}` : ''
+}

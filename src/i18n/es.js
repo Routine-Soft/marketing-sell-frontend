@@ -276,6 +276,8 @@ export default {
   'Follow-up': 'Seguimiento',
   'Follow-up: todos': 'Seguimiento: todos',
   'Follow-up para hoje': 'Seguimiento para hoy',
+  'Chamar {nome} no WhatsApp': 'Escribir a {nome} por WhatsApp',
+  'Abrir WhatsApp': 'Abrir WhatsApp',
   'Registrar contato com {nome}': 'Registrar contacto con {nome}',
   'Contatos feitos': 'Contactos hechos',
   'último em {data}': 'último el {data}',
