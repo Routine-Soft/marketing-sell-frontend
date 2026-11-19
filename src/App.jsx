@@ -19,6 +19,7 @@ import Negocios from '@/modules/negocio/components/Negocios'
 import Ideias from '@/modules/ideia/components/Ideias'
 import EditarRotina from '@/modules/rotina/components/EditarRotina'
 import Remetentes from '@/modules/remetente/components/Remetentes'
+import WhatsappPage from '@/modules/whatsapp/components/WhatsappPage'
 
 function Protegida({ roles, children }) {
   return (
@@ -50,6 +51,7 @@ export default function App() {
             <Route path="/captacao" element={<Protegida><Captacao /></Protegida>} />
             <Route path="/leads" element={<Protegida><Leads /></Protegida>} />
             <Route path="/remetentes" element={<Protegida roles={['admin', 'super_admin']}><Remetentes /></Protegida>} />
+            <Route path="/whatsapp" element={<Protegida roles={['admin', 'super_admin']}><WhatsappPage /></Protegida>} />
             <Route path="/minha-conta" element={<Protegida><MinhaConta /></Protegida>} />
             <Route path="/contas" element={<Protegida roles={['super_admin']}><ContasADM /></Protegida>} />
 

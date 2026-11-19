@@ -27,6 +27,7 @@ function gruposDoMenu(negocio) {
                 { label: tr('Buscar leads'), path: '/captacao', icone: 'captacao', roles: TODOS },
                 { label: tr('Editar rotina'), path: '/rotina/editar', icone: 'rotina', roles: ['admin', 'super_admin'] },
                 { label: tr('Remetentes de e-mail'), path: '/remetentes', icone: 'email', roles: ['admin', 'super_admin'] },
+                { label: tr('WhatsApp'), path: '/whatsapp', icone: 'whatsapp', roles: ['admin', 'super_admin'] },
             ],
         },
         {

@@ -77,7 +77,7 @@ export function estadoDaCelula(linha, dia, hoje, inicio) {
     const passou = dia.dia < hoje && dia.dia >= inicio
     if (linha.tipo === 'automatico') {
         if (!linha.meta) return ''
-        if (dia.contagens[linha.contagem] >= linha.meta) return 'feito'
+        if (dia.contagens[linha.contagem] + (dia.sobras?.[linha.contagem] ?? 0) >= linha.meta) return 'feito'
         return passou ? 'falta' : ''
     }
     if (dia.feitas.includes(linha.id)) return 'feito'

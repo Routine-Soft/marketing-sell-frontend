@@ -31,13 +31,21 @@ function Celula({ linha, dia, hoje, inicio, onMarcar }) {
   const ehHoje = dia.dia === hoje
   if (estado === 'inativo') return <td className="rotina__cel" data-estado="inativo" data-hoje={ehHoje} aria-label={tr('Não precisa nesse dia')} />
   if (linha.tipo === 'automatico') {
-    return <td className="rotina__cel rotina__cel--numero" data-estado={estado} data-hoje={ehHoje}>{dia.contagens[linha.contagem]}</td>
+    const sobra = dia.sobras?.[linha.contagem] ?? 0
+    return (
+      <td className="rotina__cel rotina__cel--numero" data-estado={estado} data-hoje={ehHoje}>
+        {dia.contagens[linha.contagem]}
+        {sobra > 0 && (
+          <small className="rotina__sobra" title={tr('{n} que sobraram dos dias anteriores', { n: sobra })}>+{sobra}</small>
+        )}
+      </td>
+    )
   }
   const feita = dia.feitas.includes(linha.id)
   return (
     <td className="rotina__cel" data-estado={estado} data-hoje={ehHoje}>
       <input type="checkbox" className="plan__caixa" checked={feita} disabled={!!linha.auto}
-        title={linha.auto ? tr('Marcada sozinha pelo sistema') : undefined}
+        title={linha.auto ? (dia.sobras?.[linha.auto] ? tr('Marcada sozinha pelo sistema. Sobra dos dias anteriores: {n}', { n: dia.sobras[linha.auto] }) : tr('Marcada sozinha pelo sistema')) : undefined}
         onChange={(e) => onMarcar(dia, linha.id, e.target.checked)}
         aria-label={`${tr(linha.titulo)} · ${diaPorExtenso(dia.dia)}`} />
     </td>

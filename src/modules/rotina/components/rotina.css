@@ -212,3 +212,11 @@
     height: 22px;
   }
 }
+
+/* Sobra da captação dos dias anteriores (ex.: "0 +63"): conta para a meta do dia. */
+.rotina__sobra {
+  margin-left: 3px;
+  font-size: 0.7em;
+  font-weight: 600;
+  opacity: 0.75;
+}
