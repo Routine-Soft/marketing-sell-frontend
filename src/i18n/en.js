@@ -458,7 +458,6 @@ export default {
   'Opcional': 'Optional',
   'Diária': 'Daily',
   'Pegar 30 leads novos e cadastrar na aba Leads': 'Get 30 new leads and add them to the Leads tab',
-  'CNPJs recém-abertos (saúde)': 'Newly opened companies (health)',
   'Doctoralia': 'Doctoralia',
   'Sites dos conselhos (CRP, CREFITO, CRN…)': 'Professional board websites (CRP, CREFITO, CRN…)',
   'Leads cadastrados no dia': 'Leads added on the day',
@@ -607,22 +606,17 @@ export default {
   'Remetente excluído ou desativado': 'Sender deleted or turned off',
   'A senha de app do Gmail foi recusada': 'The Gmail app password was rejected',
 
-  // Ideias de vídeo e artigo, CNPJs da Receita e seleção de todos os leads
+  // Ideias de vídeo e artigo e seleção de todos os leads
   '1º: {canal} · {data}': '1st: {canal} · {data}',
   'Aberta em {data}': 'Registered on {data}',
 
-  // Atividades (CNAE) da busca de CNPJs e rolagem das ideias
+  // Rolagem das ideias
   'Canal do 1º contato': '1st contact channel',
 
   // Negócios, modelos e rotina editável
   'Ideias de vídeo': 'Video ideas',
   'Ideias de artigo': 'Article ideas',
-  'CNPJs recém-abertos (Brasil)': 'Newly opened companies (Brazil)',
-  'CNPJ': 'CNPJ',
-  'A base de CNPJs ainda não foi baixada da Receita. Ela é baixada de madrugada, uma vez por mês.': 'The CNPJ database has not been downloaded from the Federal Revenue yet. It is downloaded overnight, once a month.',
   'Estado (opcional)': 'State (optional)',
-  'O nome inteiro da cidade, ex.: Niterói': 'The full city name, e.g.: Niterói',
-  'Abertas nos últimos': 'Opened in the last',
   '{n} dias': '{n} days',
   'Só com telefone': 'Only with phone',
   'Ideia {n}': 'Idea {n}',
@@ -654,25 +648,14 @@ export default {
   'Limpar seleção': 'Clear selection',
   'Selecionar todos os {n} desta lista': 'Select all {n} in this list',
   'Selecionar todos os {n} leads': 'Select all {n} leads',
-  'CNPJ (Receita)': 'CNPJ (Federal Revenue)',
   'Criar roteiro e legenda (Ideias de vídeo)': 'Create script and caption (Video ideas)',
   'Psicologia': 'Psychology',
 
   // Negócios, modelos e rotina editável
-  'Empresas abertas há pouco em qualquer atividade (CNAE) que você escolher, da base aberta da Receita Federal (atualizada todo mês).': 'Companies opened recently in any activity (CNAE) you choose, from the Brazilian Federal Revenue open database (updated every month).',
-  'Atividades (CNAE)': 'Activities (CNAE)',
-  'Nenhuma atividade ainda. Procure abaixo pelo nome do nicho (ex.: psicologia, academia, salão de beleza).': 'No activities yet. Search below by the niche name (e.g.: psychology, gym, beauty salon).',
   '{n} marcadas.': '{n} selected.',
-  'Nenhuma marcada: a busca traz todas as atividades da lista.': 'None selected: the search brings every activity on the list.',
-  'Empresas desta atividade na base': 'Companies with this activity in the database',
-  'Esta atividade ainda não foi trazida da Receita.': 'This activity has not been brought from the Federal Revenue yet.',
   'Fora da base': 'Not in the database',
   'Tirar {nome}': 'Remove {nome}',
   'Tirar da lista': 'Remove from the list',
-  'Acrescentar atividade: psicologia, academia, 9602501...': 'Add activity: psicologia, academia, 9602501...',
-  'Procurar atividade': 'Search activity',
-  'Atividades encontradas': 'Activities found',
-  'Base da Receita de {mes}: {n} empresas ativas abertas nos últimos 3 meses.': 'Federal Revenue database from {mes}: {n} active companies opened in the last 3 months.',
   'Banco de ideias ({n})': 'Idea bank ({n})',
   'Carregando dias anteriores...': 'Loading earlier days...',
   'Carregando mais dias...': 'Loading more days...',

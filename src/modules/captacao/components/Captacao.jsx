@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import FiltrosDaFonte from './FiltrosDaFonte'
 import { Icone } from '@/components/CrudCard/icones'
 import { useCaptacao } from '../captacao.hooks'
-import { FILTROS_INICIAIS, FONTES, mesDaCompetencia } from '../captacao.utils'
-import { localeAtual, tr } from '@/i18n'
+import { FILTROS_INICIAIS, FONTES } from '../captacao.utils'
+import { tr } from '@/i18n'
 import './captacao.css'
 
 const ICONES_FONTE = {
@@ -12,7 +12,6 @@ const ICONES_FONTE = {
   google: (<><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></>),
   empresas_novas: (<><path d="M12 3v3M18.4 5.6l-2.1 2.1M21 12h-3M5.6 5.6l2.1 2.1M3 12h3" /><path d="M5 21h14M7 21v-6a5 5 0 0 1 10 0v6" /></>),
   licencas: (<><rect width="18" height="14" x="3" y="5" rx="2" /><circle cx="9" cy="11" r="2" /><path d="M6 16c.7-1.4 1.8-2 3-2s2.3.6 3 2M15 10h3M15 14h2" /></>),
-  cnpj: (<><path d="M3 21h18M5 21V7l7-4 7 4v14" /><path d="M9 21v-5h6v5M10 10h4M12 8v4" /></>),
 }
 
 function CotaGoogle({ cota }) {
@@ -39,7 +38,6 @@ export default function Captacao() {
 
   function escolherFonte(id) {
     setFonte(id)
-    // CNPJs: já vêm marcadas as atividades que o negócio guardou.
     setFiltros(FILTROS_INICIAIS[id])
   }
 
@@ -96,16 +94,6 @@ export default function Captacao() {
                 <p className="alert alert--warning">{tr('A cota de buscas no Google deste mês acabou. Fale com o suporte para aumentar.')}</p>
               )}
 
-              {fonte === 'cnpj' && (opcoes.baseCnpj ? (
-                <p className="alert alert--info">
-                  {tr('Base da Receita de {mes}: {n} empresas ativas abertas nos últimos 3 meses.', {
-                    mes: mesDaCompetencia(opcoes.baseCnpj._id),
-                    n: opcoes.baseCnpj.estabelecimentos.toLocaleString(localeAtual()),
-                  })}
-                </p>
-              ) : (
-                <p className="alert alert--warning">{tr('A base de CNPJs ainda não foi baixada da Receita. Ela é baixada de madrugada, uma vez por mês.')}</p>
-              ))}
 
               <div className="form-grid captacao-form__campos">
                 <FiltrosDaFonte fonte={fonte} filtros={filtros} mudar={mudar} opcoes={opcoes} />

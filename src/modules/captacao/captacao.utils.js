@@ -17,11 +17,6 @@ export const FONTES = {
         descricao: tr('Registros novos da Secretaria de Estado (Secretary of State).'),
         traz: [tr('Endereço'), tr('Sócio'), tr('E-mail em Connecticut')],
     },
-    cnpj: {
-        nome: tr('CNPJs recém-abertos (Brasil)'),
-        descricao: tr('Empresas abertas há pouco em qualquer atividade (CNAE) que você escolher, da base aberta da Receita Federal (atualizada todo mês).'),
-        traz: [tr('Telefone'), tr('Endereço'), tr('CNPJ')],
-    },
     licencas: {
         nome: tr('Prestadores licenciados'),
         descricao: tr('Licenças do órgão estadual do Texas: salões de beleza, elétrica, estética e mais.'),
@@ -34,12 +29,6 @@ export const FILTROS_INICIAIS = {
     google: { termo: '', local: '', paginas: 3 },
     empresas_novas: { estado: '', desde: diasAtras(30), palavra: '', cidade: '', quantidade: 500 },
     licencas: { estado: 'TX', tipo: '', cidade: '', condado: '', palavra: '', quantidade: 500 },
-    cnpj: { cnaes: [], uf: '', cidade: '', dias: 90, comTelefone: true, quantidade: 100 },
-}
-
-// "outubro de 2026", da competência 'AAAA-MM' da base da Receita.
-export function mesDaCompetencia(competencia) {
-    return new Date(`${competencia}-15T12:00:00Z`).toLocaleDateString(localeAtual(), { month: 'long', year: 'numeric', timeZone: 'UTC' })
 }
 
 export function diasAtras(dias) {

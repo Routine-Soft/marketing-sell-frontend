@@ -434,7 +434,6 @@ export default {
   'Opcional': 'Opcional',
   'Diária': 'Diaria',
   'Pegar 30 leads novos e cadastrar na aba Leads': 'Conseguir 30 leads nuevos y registrarlos en la pestaña Leads',
-  'CNPJs recém-abertos (saúde)': 'Empresas de salud recién abiertas',
   'Doctoralia': 'Doctoralia',
   'Sites dos conselhos (CRP, CREFITO, CRN…)': 'Sitios de los colegios profesionales (CRP, CREFITO, CRN…)',
   'Leads cadastrados no dia': 'Leads registrados en el día',
@@ -583,18 +582,13 @@ export default {
   '1º: {canal} · {data}': '1.º: {canal} · {data}',
   'Aberta em {data}': 'Abierta el {data}',
 
-  // Ideias de vídeo e artigo, CNPJs da Receita e seleção de todos os leads
+  // Ideias de vídeo e artigo e seleção de todos os leads
   'Canal do 1º contato': 'Canal del 1.er contacto',
 
-  // Atividades (CNAE) da busca de CNPJs e rolagem das ideias
+  // Rolagem das ideias
   'Ideias de vídeo': 'Ideas de video',
   'Ideias de artigo': 'Ideas de artículos',
-  'CNPJs recém-abertos (Brasil)': 'Empresas recién abiertas (Brasil)',
-  'CNPJ': 'CNPJ',
-  'A base de CNPJs ainda não foi baixada da Receita. Ela é baixada de madrugada, uma vez por mês.': 'La base de CNPJ todavía no se descargó de la Receita. Se descarga de madrugada, una vez al mes.',
   'Estado (opcional)': 'Estado (opcional)',
-  'O nome inteiro da cidade, ex.: Niterói': 'El nombre completo de la ciudad, ej.: Niterói',
-  'Abertas nos últimos': 'Abiertas en los últimos',
   '{n} dias': '{n} días',
   'Só com telefone': 'Solo con teléfono',
   'Ideia {n}': 'Idea {n}',
@@ -626,25 +620,14 @@ export default {
   'Limpar seleção': 'Limpiar selección',
   'Selecionar todos os {n} desta lista': 'Seleccionar los {n} de esta lista',
   'Selecionar todos os {n} leads': 'Seleccionar los {n} leads',
-  'CNPJ (Receita)': 'CNPJ (Receita)',
   'Criar roteiro e legenda (Ideias de vídeo)': 'Crear guion y texto (Ideas de video)',
   'Psicologia': 'Psicología',
 
   // Negócios, modelos e rotina editável
-  'Empresas abertas há pouco em qualquer atividade (CNAE) que você escolher, da base aberta da Receita Federal (atualizada todo mês).': 'Empresas abiertas hace poco en cualquier actividad (CNAE) que elijas, de la base abierta de la Receita Federal de Brasil (actualizada cada mes).',
-  'Atividades (CNAE)': 'Actividades (CNAE)',
-  'Nenhuma atividade ainda. Procure abaixo pelo nome do nicho (ex.: psicologia, academia, salão de beleza).': 'Aún no hay actividades. Busca abajo por el nombre del nicho (ej.: psicología, gimnasio, salón de belleza).',
   '{n} marcadas.': '{n} marcadas.',
-  'Nenhuma marcada: a busca traz todas as atividades da lista.': 'Ninguna marcada: la búsqueda trae todas las actividades de la lista.',
-  'Empresas desta atividade na base': 'Empresas de esta actividad en la base',
-  'Esta atividade ainda não foi trazida da Receita.': 'Esta actividad todavía no se trajo de la Receita.',
   'Fora da base': 'Fuera de la base',
   'Tirar {nome}': 'Quitar {nome}',
   'Tirar da lista': 'Quitar de la lista',
-  'Acrescentar atividade: psicologia, academia, 9602501...': 'Agregar actividad: psicologia, academia, 9602501...',
-  'Procurar atividade': 'Buscar actividad',
-  'Atividades encontradas': 'Actividades encontradas',
-  'Base da Receita de {mes}: {n} empresas ativas abertas nos últimos 3 meses.': 'Base de la Receita de {mes}: {n} empresas activas abiertas en los últimos 3 meses.',
   'Banco de ideias ({n})': 'Banco de ideas ({n})',
   'Carregando dias anteriores...': 'Cargando días anteriores...',
   'Carregando mais dias...': 'Cargando más días...',

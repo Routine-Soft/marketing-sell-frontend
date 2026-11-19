@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
-import { buscarCnaes, buscarOpcoes, fazerBusca } from './captacao.api'
-import { editarNegocio } from '@/modules/negocio/negocio.api'
-import { useNegocio } from '@/hooks/useNegocio'
+import { buscarOpcoes, fazerBusca } from './captacao.api'
 
 export function useCaptacao() {
     const [opcoes, setOpcoes] = useState(null)
@@ -42,50 +40,4 @@ export function useCaptacao() {
     }
 
     return { opcoes, carregando, erroCarregar, buscando, erro, resultado, buscar }
-}
-
-// Atividades (CNAE) que o negócio procura na fonte de CNPJs: a lista guardada no negócio e a busca pelo nome.
-export function useAtividadesCnpj(iniciais) {
-    const { negocio, trocarNegocio } = useNegocio()
-    const [lista, setLista] = useState(iniciais)
-    const [termo, setTermo] = useState('')
-    const [achadas, setAchadas] = useState({ termo: '', itens: [] })
-    const [erro, setErro] = useState(null)
-
-    // Busca enquanto digita, com uma pausa curta para não pedir a cada letra.
-    useEffect(() => {
-        const limpo = termo.trim()
-        if (limpo.length < 2) return undefined
-        let ignore = false
-        const timer = setTimeout(() => {
-            buscarCnaes(limpo)
-                .then((r) => { if (!ignore) setAchadas({ termo: limpo, itens: r.data }) })
-                .catch((e) => { if (!ignore) setErro(e) })
-        }, 300)
-        return () => { ignore = true; clearTimeout(timer) }
-    }, [termo])
-
-    async function guardar(nova) {
-        setErro(null)
-        try {
-            const resposta = await editarNegocio(negocio._id, { cnaesCnpj: nova.filter((atividade) => !atividade.total).map((atividade) => atividade.codigo) })
-            trocarNegocio(resposta.data)
-            setLista(nova)
-            return true
-        } catch (e) {
-            setErro(e)
-            return false
-        }
-    }
-
-    const limpo = termo.trim()
-    return {
-        lista,
-        termo,
-        setTermo,
-        achadas: limpo.length >= 2 && achadas.termo === limpo ? achadas.itens.filter((a) => !lista.some((b) => b.codigo === a.codigo)).slice(0, 10) : [],
-        erro,
-        adicionar: (atividade) => guardar([...lista, { ...atividade, total: 0 }]),
-        remover: (codigo) => guardar(lista.filter((atividade) => atividade.codigo !== codigo)),
-    }
 }

@@ -43,7 +43,6 @@ export const ROTULO_FONTE = {
     google: 'Google',
     empresas_novas: tr('Empresa nova'),
     licencas: tr('Licença'),
-    cnpj: tr('CNPJ (Receita)'),
     manual: tr('Cadastro manual'),
 }
 
@@ -60,8 +59,6 @@ export const ROTULO_EXTRA = {
     naics: tr('Ramo (NAICS)'),
     condado: tr('Condado'),
     validade: tr('Validade da licença'),
-    cnpj: 'CNPJ',
-    cnae: 'CNAE',
 }
 
 export const FILTROS_VAZIOS = { busca: '', fonte: '', status: '', estado: '', comEmail: '', comTelefone: '', buscaId: '', followUp: '', ordem: '' }
