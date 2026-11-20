@@ -17,6 +17,7 @@ import Preparacao from '@/modules/checklist/components/Preparacao'
 import Anuncios from '@/modules/checklist/components/Anuncios'
 import Negocios from '@/modules/negocio/components/Negocios'
 import Ideias from '@/modules/ideia/components/Ideias'
+import IcpPersona from '@/modules/icp/components/IcpPersona'
 import EditarRotina from '@/modules/rotina/components/EditarRotina'
 import Remetentes from '@/modules/remetente/components/Remetentes'
 import WhatsappPage from '@/modules/whatsapp/components/WhatsappPage'
@@ -43,6 +44,7 @@ export default function App() {
             <Route path="/rotina/editar" element={<Protegida roles={['admin', 'super_admin']}><EditarRotina /></Protegida>} />
             <Route path="/ideias-video" element={<Protegida><Ideias key="video" tipo="video" /></Protegida>} />
           <Route path="/ideias-artigo" element={<Protegida><Ideias key="artigo" tipo="artigo" /></Protegida>} />
+          <Route path="/icp-persona" element={<Protegida><IcpPersona /></Protegida>} />
           <Route path="/painel" element={<Protegida><Painel /></Protegida>} />
             <Route path="/parceiros" element={<Protegida><Parceiros /></Protegida>} />
             <Route path="/preparacao" element={<Protegida><Preparacao /></Protegida>} />

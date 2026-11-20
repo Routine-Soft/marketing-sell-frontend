@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import Modal from '@/components/Modal/Modal'
 import ModalForm from '@/components/Modal/ModalForm'
 import { diaDaData } from './planilha.utils'
@@ -48,6 +48,7 @@ function Campo({ coluna, valor, onMudar }) {
 
 // Modal de adicionar ou editar uma linha da planilha, montado com as mesmas colunas da tabela.
 // iniciais = valores que já vêm preenchidos ao adicionar (ex.: o dia em que a pessoa tocou).
+// Coluna com "secao" abre um grupo com título no formulário.
 export default function ItemModal({ titulo, colunas, item, iniciais, erro, onSalvar, onClose }) {
   const doFormulario = colunas.filter((coluna) => coluna.tipo !== 'leitura' && coluna.formulario !== false)
   const [form, setForm] = useState(() => Object.fromEntries(doFormulario.map((coluna) => [coluna.campo, valorInicial(coluna, item ?? iniciais)])))
@@ -58,7 +59,10 @@ export default function ItemModal({ titulo, colunas, item, iniciais, erro, onSal
         <ModalForm erro={erro} fechar={fechar} onSubmit={() => onSalvar(form)} submitLabel={item ? tr('Salvar alterações') : tr('Adicionar')}>
           <div className="item-form">
             {doFormulario.map((coluna) => (
-              <Campo key={coluna.campo} coluna={coluna} valor={form[coluna.campo]} onMudar={(valor) => setForm((atual) => ({ ...atual, [coluna.campo]: valor }))} />
+              <Fragment key={coluna.campo}>
+                {coluna.secao && <h4 className="item-form__secao">{coluna.secao}</h4>}
+                <Campo coluna={coluna} valor={form[coluna.campo]} onMudar={(valor) => setForm((atual) => ({ ...atual, [coluna.campo]: valor }))} />
+              </Fragment>
             ))}
           </div>
         </ModalForm>

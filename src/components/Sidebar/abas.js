@@ -5,6 +5,7 @@ export const ABAS = [
     { id: 'rotina', label: tr('Rotina diária'), path: '/home', cor: 'var(--aba-rotina)' },
     { id: 'videos', label: tr('Ideias de vídeo'), path: '/ideias-video', cor: 'var(--aba-videos)', sempre: true },
     { id: 'artigos', label: tr('Ideias de artigo'), path: '/ideias-artigo', cor: 'var(--aba-artigos)', sempre: true },
+    { id: 'icp', label: tr('ICP e Persona'), path: '/icp-persona', cor: 'var(--aba-icp)', sempre: true },
     { id: 'painel', label: tr('Painel'), path: '/painel', cor: 'var(--aba-painel)' },
     { id: 'leads', label: tr('Leads'), path: '/leads', cor: 'var(--aba-leads)' },
     { id: 'parceiros', label: tr('Parceiros'), path: '/parceiros', cor: 'var(--aba-parceiros)' },
