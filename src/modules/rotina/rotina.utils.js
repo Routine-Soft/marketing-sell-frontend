@@ -44,11 +44,6 @@ export function hojeEmBrasilia() {
     return new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString().slice(0, 10)
 }
 
-export function segundaDe(dia) {
-    const diaDaSemana = new Date(`${dia}T12:00:00Z`).getUTCDay()
-    return somarDias(dia, -((diaDaSemana + 6) % 7))
-}
-
 function formatar(dia, opcoes) {
     return new Date(`${dia}T12:00:00Z`).toLocaleDateString(localeAtual(), { ...opcoes, timeZone: 'UTC' })
 }

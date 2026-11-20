@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { IconeSetaDir, IconeSetaEsq } from '@/components/CrudCard/icones'
 import { Link } from 'react-router-dom'
 import EstadoVazio from '@/components/EstadoVazio/EstadoVazio'
@@ -6,7 +6,7 @@ import { ICONES } from '@/components/Sidebar/menuIcones'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import { useNegocio } from '@/hooks/useNegocio'
 import { useGradeDaRotina } from '../rotina.hooks'
-import { corDoPercentual, diaCurto, diaDaSemanaCurto, diaPorExtenso, estadoDaCelula, frequenciaDe, hojeEmBrasilia, segundaDe, somarDias } from '../rotina.utils'
+import { corDoPercentual, diaCurto, diaDaSemanaCurto, diaPorExtenso, estadoDaCelula, frequenciaDe, hojeEmBrasilia, somarDias } from '../rotina.utils'
 import { tr } from '@/i18n'
 import './rotina.css'
 
@@ -57,22 +57,10 @@ export default function RotinaDiaria() {
   const { negocio } = useNegocio()
   const podeEditar = hasRole('admin') || hasRole('super_admin')
   const hoje = hojeEmBrasilia()
-  const [de, setDe] = useState(() => segundaDe(hoje))
+  // A grade começa sempre em hoje e anda sozinha a cada dia; as setas voltam ou avançam uma semana.
+  const [de, setDe] = useState(hoje)
   const { grade, erro, marcar } = useGradeDaRotina(de)
-  const colunaDeHoje = useRef(null)
-  const naSemanaAtual = de === segundaDe(hoje)
-
-  // Ao abrir cada período, a grade rola até a coluna de hoje (no celular ela pode estar fora da tela).
-  const periodo = grade?.de
-  useEffect(() => {
-    const coluna = colunaDeHoje.current
-    const moldura = coluna?.closest('.plan-wrap')
-    if (!periodo || !moldura) return
-    // Só rola se hoje não couber na tela; aí hoje fica logo depois das colunas fixas.
-    const hojeNaTela = coluna.getBoundingClientRect()
-    const fixo = moldura.querySelector('thead .rotina__tarefa').getBoundingClientRect()
-    if (hojeNaTela.right > moldura.getBoundingClientRect().right) moldura.scrollLeft += hojeNaTela.left - fixo.right
-  }, [periodo])
+  const emHoje = de === hoje
 
   return (
     <div className="page page--planilha">
@@ -86,7 +74,7 @@ export default function RotinaDiaria() {
           <button type="button" className="icon-btn" aria-label={tr('Semana anterior')} title={tr('Semana anterior')} onClick={() => setDe(somarDias(de, -7))}>
             <IconeSetaEsq />
           </button>
-          <button type="button" className="btn btn--sm" disabled={naSemanaAtual} onClick={() => setDe(segundaDe(hoje))}>{tr('Hoje')}</button>
+          <button type="button" className="btn btn--sm" disabled={emHoje} onClick={() => setDe(hoje)}>{tr('Hoje')}</button>
           <button type="button" className="icon-btn" aria-label={tr('Próxima semana')} title={tr('Próxima semana')} onClick={() => setDe(somarDias(de, 7))}>
             <IconeSetaDir />
           </button>
@@ -114,7 +102,7 @@ export default function RotinaDiaria() {
                 <th rowSpan={2} className="rotina__meta">{tr('Meta')}</th>
                 <th rowSpan={2} className="rotina__freq">{tr('Frequência')}</th>
                 {grade.dias.map((dia) => (
-                  <th key={dia.dia} className="rotina__dia" data-hoje={dia.dia === grade.hoje} ref={dia.dia === grade.hoje ? colunaDeHoje : undefined}>
+                  <th key={dia.dia} className="rotina__dia" data-hoje={dia.dia === grade.hoje}>
                     {diaCurto(dia.dia)}
                   </th>
                 ))}

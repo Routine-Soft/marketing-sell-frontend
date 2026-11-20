@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { gradeDaRotina, marcarLinha, painelDaRotina } from './rotina.api'
 import { somarDias } from './rotina.utils'
 
-// A grade da rotina: duas semanas a partir da segunda-feira "de". Marcar muda a tela na hora e confirma no servidor.
+// A grade da rotina: dez dias úteis a partir de "de" (hoje, na abertura). Marcar muda a tela na hora e confirma no servidor.
 export function useGradeDaRotina(de) {
     const [grade, setGrade] = useState(null)
     const [erro, setErro] = useState(null)
 
     useEffect(() => {
         let ignore = false
-        gradeDaRotina(de, somarDias(de, 11))
+        gradeDaRotina(de, somarDias(de, 13))
             .then((r) => { if (!ignore) { setGrade(r.data); setErro(null) } })
             .catch((e) => { if (!ignore) setErro(e) })
         return () => { ignore = true }
